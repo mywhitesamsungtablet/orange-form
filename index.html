@@ -15,6 +15,8 @@
     --muted:#6b6b6b;
     --card:#ffffff;
     --page:#f4f1ea;
+    --grid:#8c8c8c;
+    --head-bg:#f0efe9;
   }
   *{box-sizing:border-box;}
   body{
@@ -22,6 +24,7 @@
     background:var(--page);
     font-family:"Segoe UI","Tahoma","Sarabun",sans-serif;
     color:var(--ink);
+    font-size:13px;
   }
   header{
     display:flex; align-items:center; justify-content:space-between;
@@ -43,92 +46,138 @@
     color:#7a5b00; text-align:center; font-weight:700; font-size:13px;
     padding:8px 12px;
   }
-  main{max-width:640px; margin:0 auto; padding:14px;}
-  .card{
-    background:var(--card); border-radius:10px; padding:16px;
-    margin-bottom:14px; box-shadow:0 1px 3px rgba(0,0,0,.08);
+  main{max-width:700px; margin:0 auto; padding:12px;}
+
+  /* ---- ส่วน/หัวข้อ แบบแถบชื่อ Excel ---- */
+  .sheet{
+    background:var(--card); border:1px solid var(--grid);
+    margin-bottom:14px;
   }
-  .card h2{
-    font-size:14px; margin:0 0 12px; color:var(--red);
-    border-left:4px solid var(--red); padding-left:8px;
+  .sheet .sec-title{
+    background:var(--red); color:#fff; font-weight:700; font-size:12.5px;
+    padding:6px 10px; letter-spacing:.2px;
   }
-  .card h2 .opt{color:var(--muted); font-weight:400; font-size:12px;}
-  label{display:block; font-size:13px; margin:10px 0 4px; font-weight:600;}
-  label .req{color:var(--red);}
-  input[type=text], input[type=tel], input[type=number], textarea, select{
-    width:100%; padding:9px 10px; border:1px solid var(--orange-border);
-    background:var(--orange-bg); border-radius:6px; font-size:14px;
-    font-family:inherit; color:var(--ink);
+  .sheet .sec-title .opt{color:#ffd9d9; font-weight:400; font-size:11px;}
+  .sheet .sec-body{padding:0;}
+  .sheet .sec-note{
+    font-size:11px; color:var(--muted); padding:6px 10px; background:var(--head-bg);
+    border-bottom:1px solid var(--grid);
   }
-  input:focus, textarea:focus, select:focus{
-    outline:2px solid var(--red); background:#fff;
+
+  /* ---- ตารางกริดแบบ Excel: label เล็กบนซ้าย + ช่องกรอกสีส้ม ---- */
+  .xl-grid{display:grid; border-top:1px solid var(--grid);}
+  .xl-grid:first-child{border-top:none;}
+  .xl-grid.c2{grid-template-columns:1fr 1fr;}
+  .xl-grid.c3{grid-template-columns:1fr 1fr 1fr;}
+  .xl-cell{
+    border-right:1px solid var(--grid); border-bottom:1px solid var(--grid);
+    padding:6px 8px; background:#fff;
   }
-  textarea{min-height:80px; resize:vertical;}
-  .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
-  .checks{display:flex; flex-wrap:wrap; gap:14px; margin-top:6px;}
-  .checks label{
-    display:flex; align-items:center; gap:6px; font-weight:400; margin:0;
-    background:var(--orange-bg); border:1px solid var(--orange-border);
-    padding:6px 10px; border-radius:20px; font-size:13px; cursor:pointer;
+  .xl-cell:last-child{border-right:none;}
+  .xl-cell.wide{grid-column:1/-1;}
+  .xl-label{
+    display:block; font-size:10.5px; font-weight:700; color:var(--red);
+    margin-bottom:3px; text-transform:none;
   }
-  .checks input{width:16px; height:16px;}
-  details{margin-top:4px;}
+  .xl-label .req{color:var(--red);}
+  .xl-label .opt{color:var(--muted); font-weight:400;}
+  .xl-cell input[type=text], .xl-cell input[type=tel], .xl-cell input[type=number], .xl-cell textarea{
+    width:100%; border:1px solid var(--orange-border); background:var(--orange-bg);
+    padding:6px 7px; border-radius:3px; font-size:13.5px; font-family:inherit; color:var(--ink);
+  }
+  .xl-cell input:focus, .xl-cell textarea:focus{outline:2px solid var(--red); background:#fff;}
+  .xl-cell textarea{min-height:70px; resize:vertical;}
+
+  @media (max-width:560px){
+    .xl-grid.c2, .xl-grid.c3{grid-template-columns:1fr;}
+  }
+
+  /* ---- แถวเช็คบ็อกซ์แบบ Excel (ไม่ใช่ pill) ---- */
+  .chk-row{display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--grid);}
+  .chk-row:first-child{border-top:none;}
+  .chk-cell{
+    border-right:1px solid var(--grid); border-bottom:1px solid var(--grid);
+    padding:8px; background:#fff; display:flex; align-items:center; gap:6px; font-size:13px;
+  }
+  .chk-cell:last-child{border-right:none;}
+  .chk-cell input{width:16px; height:16px; flex:none;}
+  @media (max-width:560px){ .chk-row{grid-template-columns:1fr;} }
+
+  details{border-top:1px solid var(--grid);}
+  details:first-child{border-top:none;}
   summary{
-    cursor:pointer; font-size:13px; font-weight:700; color:var(--red);
-    padding:6px 0;
+    cursor:pointer; font-size:12.5px; font-weight:700; color:var(--red);
+    padding:8px 10px; background:var(--head-bg); list-style:none;
   }
-  .exchange-row{
-    border:1px dashed var(--orange-border); border-radius:8px; padding:10px;
-    margin-bottom:10px; background:#fffaf3;
+  summary::-webkit-details-marker{display:none;}
+  summary:before{content:"▸ "; }
+  details[open] summary:before{content:"▾ "; }
+
+  /* ---- ตารางสินค้าที่ขอเปลี่ยน (จำลองตารางเดิม) ---- */
+  .xl-table-wrap{overflow-x:auto; border-top:1px solid var(--grid);}
+  table.xl-table{border-collapse:collapse; width:100%; min-width:640px; font-size:12.5px;}
+  table.xl-table th, table.xl-table td{
+    border:1px solid var(--grid); padding:5px 6px; text-align:left; vertical-align:top;
   }
-  .exchange-row .row2{margin-top:6px;}
-  .exchange-row .label-num{font-size:12px; color:var(--muted); font-weight:700;}
-  .bank-box{
-    background:var(--yellow-bg); border:1px solid var(--yellow-border);
-    border-radius:8px; padding:10px; margin-top:8px;
+  table.xl-table thead th{
+    background:var(--head-bg); font-size:11px; font-weight:700; color:var(--ink);
   }
-  .proof-check{
-    display:flex; align-items:flex-start; gap:8px; margin-top:10px; font-size:13px;
+  table.xl-table td .row-num{font-weight:700; color:var(--muted); font-size:11px;}
+  table.xl-table input[type=text], table.xl-table input[type=number]{
+    width:100%; min-width:90px; border:1px solid var(--orange-border); background:var(--orange-bg);
+    padding:4px 5px; border-radius:3px; font-size:12.5px; font-family:inherit;
   }
-  .proof-check input{margin-top:3px; width:16px; height:16px;}
+
+  .bank-grid{background:var(--yellow-bg);}
+  .bank-grid .xl-cell{background:var(--yellow-bg);}
+  .bank-grid .xl-cell input{background:#fffdf0; border-color:var(--yellow-border);}
+
+  .proof-row{
+    display:flex; align-items:flex-start; gap:8px; padding:8px 10px;
+    border-top:1px solid var(--grid); font-size:12.5px; background:#fff;
+  }
+  .proof-row input{margin-top:2px; width:16px; height:16px; flex:none;}
+
+  .file-cell{padding:10px; background:#fff;}
   #fileInput{
-    width:100%; padding:10px; border:2px dashed var(--orange-border);
-    border-radius:8px; background:var(--orange-bg); font-size:13px;
+    width:100%; padding:9px; border:2px dashed var(--orange-border);
+    border-radius:6px; background:var(--orange-bg); font-size:12.5px;
   }
   #fileList{margin-top:8px; display:flex; flex-wrap:wrap; gap:6px;}
   .file-chip{
-    background:#fff; border:1px solid var(--orange-border); border-radius:6px;
+    background:#fff; border:1px solid var(--orange-border); border-radius:4px;
     padding:4px 8px; font-size:12px; display:flex; align-items:center; gap:6px;
   }
   .file-chip button{
     border:none; background:none; color:var(--red); font-weight:900; cursor:pointer; font-size:13px;
   }
   #fileHint{font-size:11px; color:var(--muted); margin-top:6px;}
+
   #submitBtn{
-    width:100%; padding:16px; font-size:17px; font-weight:800; color:#fff;
-    background:var(--red); border:none; border-radius:10px; cursor:pointer;
+    width:100%; padding:15px; font-size:16px; font-weight:800; color:#fff;
+    background:var(--red); border:none; cursor:pointer;
     box-shadow:0 5px 0 #8c1c21;
   }
   #submitBtn:active{transform:translateY(3px); box-shadow:0 2px 0 #8c1c21;}
   #submitBtn:disabled{opacity:.6;}
   #errBox{
     display:none; background:#fdecea; border:1px solid #f5b3ae; color:#a12622;
-    padding:10px 12px; border-radius:8px; font-size:13px; margin-bottom:12px;
+    padding:10px 12px; font-size:13px; margin-bottom:12px;
   }
   #formView.hidden, #doneView.hidden{display:none;}
   #doneView{
-    text-align:center; padding:40px 20px;
+    text-align:center; padding:40px 20px; background:#fff; border:1px solid var(--grid);
   }
   #doneView .check{font-size:52px;}
-  #doneView h2{color:var(--red); margin:10px 0 4px;}
+  #doneView h2{color:var(--red); margin:10px 0 4px; font-size:18px;}
   #doneView .num{
     display:inline-block; margin:10px 0; font-size:22px; font-weight:900;
     background:var(--yellow-bg); border:1px solid var(--yellow-border);
-    padding:8px 18px; border-radius:8px; letter-spacing:1px;
+    padding:8px 18px; letter-spacing:1px;
   }
   #doneView button{
-    margin-top:20px; padding:10px 20px; border-radius:8px; border:1px solid var(--red);
-    background:#fff; color:var(--red); font-weight:700; cursor:pointer;
+    margin-top:20px; padding:10px 20px; border:1px solid var(--red);
+    background:#fff; color:var(--red); font-weight:700; cursor:pointer; font-size:13px;
   }
   .credit{
     position:fixed; right:8px; bottom:6px; font-size:9px; color:#bbb;
@@ -150,85 +199,110 @@
   <div id="errBox"></div>
 
   <form id="formView">
-    <div class="card">
-      <h2>ผู้เบิก</h2>
-      <label>ลงชื่อผู้เบิก <span class="req">*</span></label>
-      <input type="text" id="requester" required>
-      <label>แผนก / BU <span class="opt">(ถ้ามี)</span></label>
-      <input type="text" id="department">
-    </div>
 
-    <div class="card">
-      <h2>ประเภทคำขอ</h2>
-      <label>หมวด / เรื่องที่ขอเบิก <span class="req">*</span></label>
-      <input type="text" id="category" placeholder="เช่น ค่าทำ visa ส่งพนักงานไป train ตปท." required>
-      <label class="opt" style="margin-top:14px;">รายละเอียดค่าใช้จ่ายสนับสนุน (เลือกได้มากกว่า 1)</label>
-      <div class="checks">
-        <label><input type="checkbox" name="purposeType" value="ประชุมวิชาการ"> ประชุมวิชาการ</label>
-        <label><input type="checkbox" name="purposeType" value="ดูงานต่างประเทศ"> ดูงานต่างประเทศ</label>
-        <label><input type="checkbox" name="purposeType" value="อื่นๆ"> อื่นๆ</label>
+    <div class="sheet">
+      <div class="xl-grid c2">
+        <div class="xl-cell">
+          <label class="xl-label">ลงชื่อผู้เบิก <span class="req">*</span></label>
+          <input type="text" id="requester" required>
+        </div>
+        <div class="xl-cell">
+          <label class="xl-label">แผนก / BU <span class="opt">(ถ้ามี)</span></label>
+          <input type="text" id="department">
+        </div>
+      </div>
+      <div class="xl-grid c2">
+        <div class="xl-cell wide">
+          <label class="xl-label">หมวด / เรื่องที่ขอเบิก <span class="req">*</span></label>
+          <input type="text" id="category" placeholder="เช่น ค่าทำ visa ส่งพนักงานไป train ตปท." required>
+        </div>
+      </div>
+      <div class="sec-note">รายละเอียดค่าใช้จ่ายสนับสนุน (เลือกได้มากกว่า 1)</div>
+      <div class="chk-row">
+        <label class="chk-cell"><input type="checkbox" name="purposeType" value="ประชุมวิชาการ"> ประชุมวิชาการ</label>
+        <label class="chk-cell"><input type="checkbox" name="purposeType" value="ดูงานต่างประเทศ"> ดูงานต่างประเทศ</label>
+        <label class="chk-cell"><input type="checkbox" name="purposeType" value="อื่นๆ"> อื่นๆ</label>
       </div>
     </div>
 
-    <div class="card">
+    <div class="sheet">
       <details>
         <summary>ข้อมูลงาน / ลูกค้า (กรอกเฉพาะที่เกี่ยวข้อง)</summary>
-        <label>ชื่องานประชุม</label>
-        <input type="text" id="meetingName">
-        <div class="row2">
-          <div><label>สถานที่ประชุม</label><input type="text" id="meetingPlace"></div>
-          <div><label>วันที่ประชุม</label><input type="text" id="meetingDate" placeholder="เช่น 2-13 มีค 69"></div>
+        <div class="xl-grid c3">
+          <div class="xl-cell"><label class="xl-label">ชื่องานประชุม</label><input type="text" id="meetingName"></div>
+          <div class="xl-cell"><label class="xl-label">สถานที่ประชุม</label><input type="text" id="meetingPlace"></div>
+          <div class="xl-cell"><label class="xl-label">วันที่ประชุม</label><input type="text" id="meetingDate" placeholder="เช่น 2-13 มีค 69"></div>
         </div>
-        <div class="row2">
-          <div><label>ชื่อลูกค้า</label><input type="text" id="customerName"></div>
-          <div><label>ชื่อโรงพยาบาล</label><input type="text" id="hospitalName"></div>
+        <div class="xl-grid c3">
+          <div class="xl-cell"><label class="xl-label">ชื่อลูกค้า</label><input type="text" id="customerName"></div>
+          <div class="xl-cell"><label class="xl-label">ชื่อโรงพยาบาล</label><input type="text" id="hospitalName"></div>
+          <div class="xl-cell"><label class="xl-label">เบอร์โทรศัพท์ลูกค้า</label><input type="tel" id="customerPhone"></div>
         </div>
-        <label>เบอร์โทรศัพท์ลูกค้า</label>
-        <input type="tel" id="customerPhone">
       </details>
     </div>
 
-    <div class="card">
+    <div class="sheet">
       <details id="exchangeDetails">
         <summary>สินค้าที่ขอเปลี่ยน (กรอกเฉพาะกรณีแลกเปลี่ยนสินค้า)</summary>
-        <div id="exchangeRows"></div>
+        <div class="xl-table-wrap">
+          <table class="xl-table">
+            <thead>
+              <tr>
+                <th>ลำดับ</th>
+                <th>สินค้าที่ขอคืน</th>
+                <th>ราคา</th>
+                <th>สินค้าที่ขอเปลี่ยน</th>
+                <th>ราคา</th>
+                <th>อ้างอิงเลขที่บิล</th>
+              </tr>
+            </thead>
+            <tbody id="exchangeRows"></tbody>
+          </table>
+        </div>
       </details>
     </div>
 
-    <div class="card">
-      <h2>รายละเอียดคำขอ</h2>
-      <label>รายละเอียด (ค่าลงทะเบียน, ค่าที่พัก, ค่าอาหาร ฯลฯ) <span class="req">*</span></label>
-      <textarea id="details" required placeholder="อธิบายรายละเอียดคำขอ และวิธีคิดยอดเงินโดยย่อ"></textarea>
-      <label>ค่าใช้จ่ายทั้งสิ้น (บาท) <span class="req">*</span></label>
-      <input type="number" id="totalAmount" min="0" step="0.01" required>
-
-      <div class="proof-check">
+    <div class="sheet">
+      <div class="sec-title">รายละเอียดคำขอ</div>
+      <div class="xl-grid c2">
+        <div class="xl-cell wide">
+          <label class="xl-label">รายละเอียด (ค่าลงทะเบียน, ค่าที่พัก, ค่าอาหาร ฯลฯ) <span class="req">*</span></label>
+          <textarea id="details" required placeholder="อธิบายรายละเอียดคำขอ และวิธีคิดยอดเงินโดยย่อ"></textarea>
+        </div>
+      </div>
+      <div class="xl-grid c2">
+        <div class="xl-cell">
+          <label class="xl-label">ค่าใช้จ่ายทั้งสิ้น (บาท) <span class="req">*</span></label>
+          <input type="number" id="totalAmount" min="0" step="0.01" required>
+        </div>
+      </div>
+      <div class="proof-row">
         <input type="checkbox" id="needPaymentProof">
-        <label for="needPaymentProof" style="margin:0; font-weight:400;">ขอให้ส่งหลักฐานการชำระเงินกลับให้ผู้แจ้งเบิกด้วย เพื่อแจ้งให้ลูกค้าทราบ</label>
+        <label for="needPaymentProof">ขอให้ส่งหลักฐานการชำระเงินกลับให้ผู้แจ้งเบิกด้วย เพื่อแจ้งให้ลูกค้าทราบ</label>
       </div>
     </div>
 
-    <div class="card">
+    <div class="sheet">
       <details>
         <summary>ระบุโอนเงินให้ (กรอกถ้าต้องการให้โอนเข้าบัญชีนี้)</summary>
-        <div class="bank-box">
-          <label>ชื่อบัญชี</label>
-          <input type="text" id="transferName">
-          <div class="row2">
-            <div><label>ธนาคาร</label><input type="text" id="transferBank"></div>
-            <div><label>สาขา</label><input type="text" id="transferBranch"></div>
-          </div>
-          <label>เลขบัญชี</label>
-          <input type="text" id="transferAccountNo">
+        <div class="xl-grid c2 bank-grid">
+          <div class="xl-cell wide"><label class="xl-label">ชื่อบัญชี</label><input type="text" id="transferName"></div>
+        </div>
+        <div class="xl-grid c3 bank-grid">
+          <div class="xl-cell"><label class="xl-label">ธนาคาร</label><input type="text" id="transferBank"></div>
+          <div class="xl-cell"><label class="xl-label">สาขา</label><input type="text" id="transferBranch"></div>
+          <div class="xl-cell"><label class="xl-label">เลขบัญชี</label><input type="text" id="transferAccountNo"></div>
         </div>
       </details>
     </div>
 
-    <div class="card">
-      <h2>แนบไฟล์หลักฐาน <span class="req">*</span></h2>
-      <input type="file" id="fileInput" multiple accept="image/*,.pdf">
-      <div id="fileHint">แนบใบเสร็จ/ใบกำกับภาษี/ใบเสนอราคา ฯลฯ ได้หลายไฟล์ (รวมไม่ควรเกิน ~15MB)</div>
-      <div id="fileList"></div>
+    <div class="sheet">
+      <div class="sec-title">แนบไฟล์หลักฐาน <span class="req">*</span></div>
+      <div class="file-cell">
+        <input type="file" id="fileInput" multiple accept="image/*,.pdf">
+        <div id="fileHint">แนบใบเสร็จ/ใบกำกับภาษี/ใบเสนอราคา ฯลฯ ได้หลายไฟล์ (รวมไม่ควรเกิน ~15MB)</div>
+        <div id="fileList"></div>
+      </div>
     </div>
 
     <button type="submit" id="submitBtn">ส่งคำขอ</button>
@@ -244,7 +318,7 @@
   </div>
 </main>
 
-<div class="credit">ใบส้ม Online · v1.1 · 2026-08-05</div>
+<div class="credit">ใบส้ม Online · v1.2 · 2026-08-05</div>
 
 <script>
 // ⚠️ ต้องแก้เป็น URL ของ Apps Script Web App หลัง deploy จริง
@@ -253,22 +327,17 @@ const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxeSI8yeO_OMOrp
 const EXCHANGE_ROW_COUNT = 4;
 const exchangeRowsEl = document.getElementById('exchangeRows');
 for (let i = 1; i <= EXCHANGE_ROW_COUNT; i++) {
-  const div = document.createElement('div');
-  div.className = 'exchange-row';
-  div.innerHTML = `
-    <div class="label-num">รายการที่ ${i}</div>
-    <div class="row2">
-      <div><label>รหัสสินค้าที่ขอคืน</label><input type="text" class="exReturnCode"></div>
-      <div><label>ราคา</label><input type="number" step="0.01" class="exReturnPrice"></div>
-    </div>
-    <div class="row2">
-      <div><label>รหัสสินค้าที่ต้องการเปลี่ยน</label><input type="text" class="exNewCode"></div>
-      <div><label>ราคา</label><input type="number" step="0.01" class="exNewPrice"></div>
-    </div>
-    <label>อ้างอิงเลขที่บิล</label>
-    <input type="text" class="exRefBill">
+  const tr = document.createElement('tr');
+  tr.className = 'exchange-row';
+  tr.innerHTML = `
+    <td><span class="row-num">${i}</span></td>
+    <td><input type="text" class="exReturnCode"></td>
+    <td><input type="number" step="0.01" class="exReturnPrice"></td>
+    <td><input type="text" class="exNewCode"></td>
+    <td><input type="number" step="0.01" class="exNewPrice"></td>
+    <td><input type="text" class="exRefBill"></td>
   `;
-  exchangeRowsEl.appendChild(div);
+  exchangeRowsEl.appendChild(tr);
 }
 
 let attachedFiles = []; // {filename, mimeType, base64, sizeLabel}

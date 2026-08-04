@@ -103,15 +103,8 @@
   .chk-cell input{width:16px; height:16px; flex:none;}
   @media (max-width:560px){ .chk-row{grid-template-columns:1fr;} }
 
-  details{border-top:1px solid var(--grid);}
-  details:first-child{border-top:none;}
-  summary{
-    cursor:pointer; font-size:12.5px; font-weight:700; color:var(--red);
-    padding:8px 10px; background:var(--head-bg); list-style:none;
-  }
-  summary::-webkit-details-marker{display:none;}
-  summary:before{content:"▸ "; }
-  details[open] summary:before{content:"▾ "; }
+  .sec-title{border-top:1px solid var(--grid);}
+  .sheet>.sec-title:first-child{border-top:none;}
 
   /* ---- ตารางสินค้าที่ขอเปลี่ยน (จำลองตารางเดิม) ---- */
   .xl-table-wrap{overflow-x:auto; border-top:1px solid var(--grid);}
@@ -123,6 +116,7 @@
     background:var(--head-bg); font-size:11px; font-weight:700; color:var(--ink);
   }
   table.xl-table td .row-num{font-weight:700; color:var(--muted); font-size:11px;}
+  table.xl-table td.exDiff{text-align:right; color:var(--muted); background:var(--head-bg); font-variant-numeric:tabular-nums;}
   table.xl-table input[type=text], table.xl-table input[type=number]{
     width:100%; min-width:90px; border:1px solid var(--orange-border); background:var(--orange-bg);
     padding:4px 5px; border-radius:3px; font-size:12.5px; font-family:inherit;
@@ -226,40 +220,37 @@
     </div>
 
     <div class="sheet">
-      <details>
-        <summary>ข้อมูลงาน / ลูกค้า (กรอกเฉพาะที่เกี่ยวข้อง)</summary>
-        <div class="xl-grid c3">
-          <div class="xl-cell"><label class="xl-label">ชื่องานประชุม</label><input type="text" id="meetingName"></div>
-          <div class="xl-cell"><label class="xl-label">สถานที่ประชุม</label><input type="text" id="meetingPlace"></div>
-          <div class="xl-cell"><label class="xl-label">วันที่ประชุม</label><input type="text" id="meetingDate" placeholder="เช่น 2-13 มีค 69"></div>
-        </div>
-        <div class="xl-grid c3">
-          <div class="xl-cell"><label class="xl-label">ชื่อลูกค้า</label><input type="text" id="customerName"></div>
-          <div class="xl-cell"><label class="xl-label">ชื่อโรงพยาบาล</label><input type="text" id="hospitalName"></div>
-          <div class="xl-cell"><label class="xl-label">เบอร์โทรศัพท์ลูกค้า</label><input type="tel" id="customerPhone"></div>
-        </div>
-      </details>
+      <div class="sec-title">ข้อมูลงาน / ลูกค้า <span class="opt">(กรอกเฉพาะที่เกี่ยวข้อง)</span></div>
+      <div class="xl-grid c3">
+        <div class="xl-cell"><label class="xl-label">ชื่องานประชุม</label><input type="text" id="meetingName"></div>
+        <div class="xl-cell"><label class="xl-label">สถานที่ประชุม</label><input type="text" id="meetingPlace"></div>
+        <div class="xl-cell"><label class="xl-label">วันที่ประชุม</label><input type="text" id="meetingDate" placeholder="เช่น 2-13 มีค 69"></div>
+      </div>
+      <div class="xl-grid c3">
+        <div class="xl-cell"><label class="xl-label">ชื่อลูกค้า</label><input type="text" id="customerName"></div>
+        <div class="xl-cell"><label class="xl-label">ชื่อโรงพยาบาล</label><input type="text" id="hospitalName"></div>
+        <div class="xl-cell"><label class="xl-label">เบอร์โทรศัพท์ลูกค้า</label><input type="tel" id="customerPhone"></div>
+      </div>
     </div>
 
     <div class="sheet">
-      <details id="exchangeDetails">
-        <summary>สินค้าที่ขอเปลี่ยน (กรอกเฉพาะกรณีแลกเปลี่ยนสินค้า)</summary>
-        <div class="xl-table-wrap">
-          <table class="xl-table">
-            <thead>
-              <tr>
-                <th>ลำดับ</th>
-                <th>สินค้าที่ขอคืน</th>
-                <th>ราคา</th>
-                <th>สินค้าที่ขอเปลี่ยน</th>
-                <th>ราคา</th>
-                <th>อ้างอิงเลขที่บิล</th>
-              </tr>
-            </thead>
-            <tbody id="exchangeRows"></tbody>
-          </table>
-        </div>
-      </details>
+      <div class="sec-title">สินค้าที่ขอเปลี่ยน <span class="opt">(กรอกเฉพาะกรณีแลกเปลี่ยนสินค้า)</span></div>
+      <div class="xl-table-wrap">
+        <table class="xl-table">
+          <thead>
+            <tr>
+              <th>ลำดับ</th>
+              <th>สินค้าที่ขอคืน</th>
+              <th>ราคา</th>
+              <th>สินค้าที่ขอเปลี่ยน</th>
+              <th>ราคา</th>
+              <th>ส่วนต่าง</th>
+              <th>อ้างอิงเลขที่บิล</th>
+            </tr>
+          </thead>
+          <tbody id="exchangeRows"></tbody>
+        </table>
+      </div>
     </div>
 
     <div class="sheet">
@@ -283,17 +274,15 @@
     </div>
 
     <div class="sheet">
-      <details>
-        <summary>ระบุโอนเงินให้ (กรอกถ้าต้องการให้โอนเข้าบัญชีนี้)</summary>
-        <div class="xl-grid c2 bank-grid">
-          <div class="xl-cell wide"><label class="xl-label">ชื่อบัญชี</label><input type="text" id="transferName"></div>
-        </div>
-        <div class="xl-grid c3 bank-grid">
-          <div class="xl-cell"><label class="xl-label">ธนาคาร</label><input type="text" id="transferBank"></div>
-          <div class="xl-cell"><label class="xl-label">สาขา</label><input type="text" id="transferBranch"></div>
-          <div class="xl-cell"><label class="xl-label">เลขบัญชี</label><input type="text" id="transferAccountNo"></div>
-        </div>
-      </details>
+      <div class="sec-title">ระบุโอนเงินให้ <span class="opt">(กรอกถ้าต้องการให้โอนเข้าบัญชีนี้)</span></div>
+      <div class="xl-grid c2 bank-grid">
+        <div class="xl-cell wide"><label class="xl-label">ชื่อบัญชี</label><input type="text" id="transferName"></div>
+      </div>
+      <div class="xl-grid c3 bank-grid">
+        <div class="xl-cell"><label class="xl-label">ธนาคาร</label><input type="text" id="transferBank"></div>
+        <div class="xl-cell"><label class="xl-label">สาขา</label><input type="text" id="transferBranch"></div>
+        <div class="xl-cell"><label class="xl-label">เลขบัญชี</label><input type="text" id="transferAccountNo"></div>
+      </div>
     </div>
 
     <div class="sheet">
@@ -318,7 +307,7 @@
   </div>
 </main>
 
-<div class="credit">ใบส้ม Online · v1.2 · 2026-08-05</div>
+<div class="credit">ใบส้ม Online · v1.3 · 2026-08-05</div>
 
 <script>
 // ⚠️ ต้องแก้เป็น URL ของ Apps Script Web App หลัง deploy จริง
@@ -335,9 +324,20 @@ for (let i = 1; i <= EXCHANGE_ROW_COUNT; i++) {
     <td><input type="number" step="0.01" class="exReturnPrice"></td>
     <td><input type="text" class="exNewCode"></td>
     <td><input type="number" step="0.01" class="exNewPrice"></td>
+    <td class="exDiff">0</td>
     <td><input type="text" class="exRefBill"></td>
   `;
   exchangeRowsEl.appendChild(tr);
+
+  const returnPriceEl = tr.querySelector('.exReturnPrice');
+  const newPriceEl = tr.querySelector('.exNewPrice');
+  const diffEl = tr.querySelector('.exDiff');
+  const updateDiff = () => {
+    const diff = (parseFloat(newPriceEl.value) || 0) - (parseFloat(returnPriceEl.value) || 0);
+    diffEl.textContent = diff.toFixed(2).replace(/\.00$/, '');
+  };
+  returnPriceEl.addEventListener('input', updateDiff);
+  newPriceEl.addEventListener('input', updateDiff);
 }
 
 let attachedFiles = []; // {filename, mimeType, base64, sizeLabel}

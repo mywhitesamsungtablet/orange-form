@@ -16,7 +16,7 @@
   }
   *{box-sizing:border-box;}
   body{
-    margin:0; padding:0 0 70px;
+    margin:0; padding:0 0 12px;
     background:var(--page);
     font-family:"Tahoma","Sarabun","Segoe UI",sans-serif;
     color:var(--ink);
@@ -24,28 +24,51 @@
   }
 
   /* กระดาษ A4 แนวนอนจำลอง */
-  .paper-scroll{overflow-x:auto; padding:10px;}
+  .paper-scroll{overflow-x:auto; padding:6px;}
   .paper{
     width:1080px; margin:0 auto; background:#fff;
     border:1.5px solid var(--grid);
   }
 
-  /* ---------- หัวกระดาษ ---------- */
-  .ph{display:flex; align-items:center; padding:6px 8px; gap:10px;}
-  .ph img{height:42px; object-fit:contain;}
+  /* ---------- หัวกระดาษ: โลโก้ | ชื่อบริษัท | เลขที่ใบส้ม + ปุ่ม ---------- */
+  .ph{display:flex; align-items:center; padding:3px 8px; gap:10px;}
+  .ph img{height:30px; object-fit:contain;}
   .ph .ph-title{flex:1; text-align:center;}
   .ph .ph-title h1{
-    margin:0; font-size:19px; font-weight:700; text-decoration:underline;
+    margin:0; font-size:16px; font-weight:700; text-decoration:underline;
     letter-spacing:.5px;
   }
-  .ph .ph-title p{margin:2px 0 0; font-size:11px; color:#555;}
-  .ph .ph-spacer{width:150px; text-align:right; font-size:10px; color:#777;}
+  .ph .ph-title p{margin:1px 0 0; font-size:10px; color:#555;}
+
+  /* กล่องเลขที่ใบส้ม + ปุ่ม (มุมขวาบน) */
+  .docbox{
+    display:flex; align-items:center; gap:8px; flex:none;
+  }
+  .docno-wrap{text-align:center; line-height:1;}
+  .docno-label{font-size:9px; color:#777;}
+  .docno{
+    font-size:26px; font-weight:900; color:var(--red); letter-spacing:1px;
+    font-family:"Tahoma",sans-serif;
+  }
+  .docbtns{display:flex; flex-direction:column; gap:3px;}
+  #submitBtn{
+    padding:7px 16px; font-size:13px; font-weight:800; color:#fff;
+    background:#1e7e34; border:none; cursor:pointer; box-shadow:0 3px 0 #14532a;
+    white-space:nowrap;
+  }
+  #submitBtn:active{transform:translateY(2px); box-shadow:0 1px 0 #14532a;}
+  #submitBtn:disabled{opacity:.6;}
+  #loadBtn{
+    padding:4px 16px; font-size:11px; font-weight:700; color:#1e7e34;
+    background:#fff; border:1px solid #1e7e34; cursor:pointer; white-space:nowrap;
+  }
+  #loadBtn:hover{background:#eefbf1;}
 
   /* ---------- ตารางหลัก ---------- */
   table.f{border-collapse:collapse; width:100%; table-layout:fixed;}
   table.f td, table.f th{
-    border:1px solid var(--grid); padding:2px 4px; vertical-align:middle;
-    font-size:12px; font-weight:400;
+    border:1px solid var(--grid); padding:0 4px; vertical-align:middle;
+    font-size:11.5px; font-weight:400; line-height:1.15;
   }
   /* ห้าม nowrap: label ไทยยาว ๆ (เช่น "หมวด / เรื่องที่ขอเบิก") จะล้นออกไปทับช่องกรอก */
   .lbl{font-size:11.5px; line-height:1.2; word-break:break-word;}
@@ -55,7 +78,7 @@
   /* ช่องกรอก: เต็มเซลล์ ไม่มีขอบของตัวเอง (ให้เส้นตารางเป็นขอบ) */
   .f input[type=text], .f input[type=tel], .f input[type=number], .f textarea{
     width:100%; border:none; background:var(--orange);
-    padding:4px 5px; font-size:12.5px; font-family:inherit; color:var(--ink);
+    padding:2px 5px; font-size:12px; font-family:inherit; color:var(--ink);
     display:block;
   }
   .f input:focus, .f textarea:focus{outline:2px solid var(--red); position:relative; z-index:2;}
@@ -67,13 +90,13 @@
   .req{color:var(--red); font-weight:700;}
 
   /* แถบเหลืองซ้ายบน */
-  .warn{background:var(--yellow); font-size:11px; font-weight:700; padding:3px 6px;}
+  .warn{background:var(--yellow); font-size:11px; font-weight:700; padding:1px 6px;}
 
   /* กล่องสำหรับเจ้าหน้าที่ (มุมขวาบน) */
-  .staff-hd{font-size:11px; font-weight:700; text-decoration:underline; padding:2px 4px;}
-  .staff-chk{font-size:10.5px; white-space:nowrap; padding:2px 4px;}
-  .staff-chk input{width:12px; height:12px; vertical-align:-1px; margin-right:3px;}
-  .staff-note{font-size:9.5px; color:#666; font-weight:400;}
+  .staff-hd{font-size:10.5px; font-weight:700; text-decoration:underline; padding:1px 4px;}
+  .staff-chk{font-size:10px; white-space:nowrap; padding:1px 4px;}
+  .staff-chk input{width:11px; height:11px; vertical-align:-1px; margin-right:3px;}
+  .staff-note{font-size:9px; color:#666; font-weight:400;}
 
   /* ตารางรายการสินค้า */
   .items input{background:var(--orange);}
@@ -81,49 +104,41 @@
 
   /* กล่องอื่นๆ ด้านขวา */
   td.notes{vertical-align:top; padding:0; background:var(--orange-soft);}
-  td.notes textarea{background:var(--orange-soft); min-height:150px; border:none;}
-  .amt-wrap{padding:4px 6px; background:var(--orange-soft); border-top:1px dashed #b98a4e;}
-  .amt-wrap label{font-size:11px; display:block; margin-bottom:2px;}
+  td.notes textarea{background:var(--orange-soft); min-height:96px; border:none;}
+  .amt-wrap{padding:2px 6px; background:var(--orange-soft); border-top:1px dashed #b98a4e;}
+  .amt-wrap label{font-size:10.5px; display:block; margin-bottom:1px;}
   .amt-wrap input{
     width:100%; border:1px solid #b98a4e; background:#fff;
-    padding:4px 6px; font-size:15px; font-weight:800; color:var(--red);
+    padding:2px 6px; font-size:14px; font-weight:800; color:var(--red);
     font-family:inherit;
   }
-  .proof{font-size:10.5px; padding:3px 5px; background:var(--orange-soft);}
-  .proof input{width:12px; height:12px; vertical-align:-1px; margin-right:3px;}
+  .proof{font-size:10px; padding:1px 5px; background:var(--orange-soft);}
+  .proof input{width:11px; height:11px; vertical-align:-1px; margin-right:3px;}
 
   /* แถวลายเซ็นเจ้าหน้าที่ (แสดงอย่างเดียว) */
-  .sig-name{text-align:center; font-size:11px; padding:2px;}
-  .sig-role{text-align:center; font-size:10px; padding:2px; height:22px;}
-  .sig-blank{height:56px; background:#fff;}
+  .sig-name{text-align:center; font-size:10.5px; padding:1px;}
+  .sig-role{text-align:center; font-size:9.5px; padding:1px; height:16px;}
+  .sig-blank{height:30px; background:#fff;}
   .disabled-zone{background:#f7f7f7;}
   .disabled-zone input{background:#efefef !important;}
 
   /* แนบไฟล์ */
-  .file-cell{padding:8px;}
+  .file-cell{padding:3px 6px;}
   #fileInput{
-    width:100%; padding:8px; border:2px dashed #b98a4e;
-    background:#fff6ea; font-size:12px;
+    width:100%; padding:3px; border:1px dashed #b98a4e;
+    background:#fff6ea; font-size:11px;
   }
-  #fileList{margin-top:6px; display:flex; flex-wrap:wrap; gap:5px;}
+  #fileList{margin-top:3px; display:flex; flex-wrap:wrap; gap:4px;}
   .file-chip{
     background:#fff; border:1px solid #b98a4e;
-    padding:3px 7px; font-size:11px; display:flex; align-items:center; gap:5px;
+    padding:1px 6px; font-size:10.5px; display:flex; align-items:center; gap:5px;
   }
   .file-chip button{border:none; background:none; color:var(--red); font-weight:900; cursor:pointer;}
-  #fileHint{font-size:10.5px; color:#666; margin-top:5px;}
+  #fileHint{font-size:9.5px; color:#666; margin-top:2px;}
 
-  /* ปุ่มส่ง + สถานะ */
-  .actions{width:1080px; margin:10px auto 0;}
-  #submitBtn{
-    width:100%; padding:15px; font-size:16px; font-weight:800; color:#fff;
-    background:var(--red); border:none; cursor:pointer; box-shadow:0 5px 0 #7d0000;
-  }
-  #submitBtn:active{transform:translateY(3px); box-shadow:0 2px 0 #7d0000;}
-  #submitBtn:disabled{opacity:.6;}
   #errBox{
-    display:none; width:1080px; margin:0 auto 10px; background:#fdecea;
-    border:1px solid #f5b3ae; color:#a12622; padding:9px 12px; font-size:12.5px;
+    display:none; width:1080px; margin:0 auto 6px; background:#fdecea;
+    border:1px solid #f5b3ae; color:#a12622; padding:6px 10px; font-size:12px;
   }
   #formView.hidden, #doneView.hidden{display:none;}
   #doneView{
@@ -140,10 +155,35 @@
     margin-top:18px; padding:9px 20px; border:1px solid var(--red);
     background:#fff; color:var(--red); font-weight:700; cursor:pointer; font-size:13px;
   }
-  .credit{position:fixed; right:8px; bottom:6px; font-size:9px; color:#999;}
+  .credit{position:fixed; right:8px; bottom:2px; font-size:9px; color:#999;}
 
   .hint-scroll{
-    width:1080px; margin:0 auto 6px; font-size:11px; color:#555;
+    width:1080px; margin:0 auto 4px; font-size:10.5px; color:#555;
+  }
+
+  /* ---------- สั่งพิมพ์: A4 แนวนอน 1 แผ่นพอดี ---------- */
+  @page { size: A4 landscape; margin: 5mm; }
+  @media print{
+    body{background:#fff; padding:0;}
+    .paper-scroll{overflow:visible; padding:0;}
+    /* A4 นอน 297mm หัก margin 5mm สองข้าง = 287mm → ตั้งความกว้างเป็น mm ตรง ๆ
+       (ห้ามใช้ transform:scale เพราะไม่ลดกล่อง layout จริง → ยังตัดหน้าเป็น 2 แผ่น)
+       ตารางทุกตัวเป็น table-layout:fixed + width:100% → คอลัมน์ px ย่อตามสัดส่วนเอง */
+    .paper{
+      width:284mm; border:1.5px solid #000;
+      page-break-inside:avoid; break-inside:avoid;
+    }
+    /* ซ่อนสิ่งที่ไม่ใช่ตัวฟอร์ม */
+    .hint-scroll, .docbtns, #errBox, .credit, #fileHint{display:none !important;}
+    /* ช่องกรอกให้พิมพ์ออกมาเป็นเส้นตารางเปล่า อ่านง่ายเหมือนกระดาษจริง */
+    .f input, .f textarea, .amt-wrap input{
+      background:transparent !important; -webkit-print-color-adjust:exact; print-color-adjust:exact;
+    }
+    .f td.in, .f td.in-y, td.notes, .amt-wrap, .proof,
+    .warn, .staff-chk, .disabled-zone, table.f thead th, .sec-title{
+      -webkit-print-color-adjust:exact; print-color-adjust:exact;
+    }
+    textarea{overflow:visible !important;}
   }
 </style>
 </head>
@@ -163,7 +203,16 @@
         <h1>บริษัท โกสินทร์เวชภัณฑ์ จำกัด</h1>
         <p>ใบส้ม Online — แบบฟอร์มขออนุมัติ / เบิกเงิน</p>
       </div>
-      <div class="ph-spacer">ใบส้ม Online</div>
+      <div class="docbox">
+        <div class="docno-wrap">
+          <div class="docno-label">เลขที่ใบส้ม</div>
+          <div class="docno" id="docNo">····-··</div>
+        </div>
+        <div class="docbtns">
+          <button type="submit" id="submitBtn">ส่งคำขอ</button>
+          <button type="button" id="loadBtn">โหลดใบส้มเดิม</button>
+        </div>
+      </div>
     </div>
 
     <!-- ส่วนหัวข้อมูล + กล่องสำหรับเจ้าหน้าที่ -->
@@ -342,10 +391,6 @@
     </table>
 
   </div><!-- /paper -->
-
-  <div class="actions">
-    <button type="submit" id="submitBtn">ส่งคำขอ</button>
-  </div>
 </div>
 </form>
 
@@ -358,7 +403,7 @@
   <button id="newFormBtn" type="button">ส่งคำขอใหม่</button>
 </div>
 
-<div class="credit">ใบส้ม Online · v2.1 · 2026-08-05</div>
+<div class="credit">ใบส้ม Online · v3.0 · 2026-08-05</div>
 
 <script>
 // ⚠️ ต้องแก้เป็น URL ของ Apps Script Web App หลัง deploy จริง
@@ -396,6 +441,83 @@ for (let i = 1; i <= EXCHANGE_ROW_COUNT; i++) {
   };
   returnPriceEl.addEventListener('input', updateDiff);
   newPriceEl.addEventListener('input', updateDiff);
+}
+
+/** เรียก backend (ทุก endpoint เป็น POST + field action) */
+function callApi(payload) {
+  return fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
+    .then(function (r) { return r.json(); });
+}
+
+/* ---- โชว์เลขที่ใบส้มถัดไปบนหัวฟอร์ม (ยังไม่กินเลขจนกว่าจะกดส่ง) ---- */
+function refreshDocNo() {
+  callApi({ action: 'peek' })
+    .then(function (j) {
+      if (j && j.ok) document.getElementById('docNo').textContent = j.next;
+    })
+    .catch(function () { /* ออฟไลน์/เน็ตช้า — ปล่อยเป็นขีดไว้ ไม่ขัดจังหวะการกรอก */ });
+}
+refreshDocNo();
+
+/* ---- โหลดใบส้มเดิมกลับมากรอก ---- */
+document.getElementById('loadBtn').addEventListener('click', function () {
+  var num = prompt('ใส่เลขที่ใบส้มที่ต้องการโหลด (เช่น 0746-69)');
+  if (!num) return;
+  var btn = this;
+  btn.disabled = true;
+  btn.textContent = 'กำลังโหลด...';
+  callApi({ action: 'load', number: num.trim() })
+    .then(function (j) {
+      if (!j.ok) { showError(j.error || 'โหลดไม่สำเร็จ'); return; }
+      fillForm(j.data);
+      hideError();
+      document.getElementById('docNo').textContent = j.data.number;
+      alert('โหลดใบส้ม ' + j.data.number + ' เรียบร้อย\n\n' +
+            'แก้ไขได้ตามต้องการ — เมื่อกด "ส่งคำขอ" ระบบจะออกเลขที่ใบใหม่ให้ (ไม่ทับใบเดิม)\n' +
+            'หมายเหตุ: ไฟล์แนบต้องแนบใหม่');
+    })
+    .catch(function (err) { showError('โหลดไม่สำเร็จ: ' + err.message); })
+    .finally(function () { btn.disabled = false; btn.textContent = 'โหลดใบส้มเดิม'; });
+});
+
+function setVal(id, v) {
+  var el = document.getElementById(id);
+  if (el) el.value = (v === undefined || v === null) ? '' : v;
+}
+
+function fillForm(d) {
+  setVal('requester', d.requester);
+  setVal('department', d.department);
+  setVal('category', d.category);
+  setVal('meetingName', d.meetingName);
+  setVal('meetingPlace', d.meetingPlace);
+  setVal('meetingDate', d.meetingDate);
+  setVal('customerName', d.customerName);
+  setVal('hospitalName', d.hospitalName);
+  setVal('customerPhone', d.customerPhone);
+  setVal('details', d.details);
+  setVal('totalAmount', d.totalAmount);
+  setVal('transferName', d.transferName);
+  setVal('transferBank', d.transferBank);
+  setVal('transferBranch', d.transferBranch);
+  setVal('transferAccountNo', d.transferAccountNo);
+  document.getElementById('needPaymentProof').checked = !!d.needPaymentProof;
+
+  var want = d.purposeType || [];
+  document.querySelectorAll('input[name=purposeType]').forEach(function (c) {
+    c.checked = want.indexOf(c.value) >= 0;
+  });
+
+  var items = d.exchangeItems || [];
+  document.querySelectorAll('.exchange-row').forEach(function (row, i) {
+    var it = items[i] || {};
+    row.querySelector('.exReturnCode').value = it.returnCode || '';
+    row.querySelector('.exReturnPrice').value = it.returnPrice || '';
+    row.querySelector('.exNewCode').value = it.newCode || '';
+    row.querySelector('.exNewPrice').value = it.newPrice || '';
+    row.querySelector('.exReturnPrice').dispatchEvent(new Event('input'));
+    if (i === 0) setVal('refBillNo', it.refBillNo || '');
+  });
 }
 
 let attachedFiles = []; // {filename, mimeType, base64, sizeLabel}
@@ -525,6 +647,7 @@ document.getElementById('formView').addEventListener('submit', async (e) => {
     const json = await res.json();
     if (!json.ok) throw new Error(json.error || 'ส่งไม่สำเร็จ');
 
+    document.getElementById('docNo').textContent = json.number;
     document.getElementById('doneNumber').textContent = json.number;
     document.getElementById('formView').classList.add('hidden');
     document.getElementById('doneView').classList.remove('hidden');
@@ -540,8 +663,10 @@ document.getElementById('newFormBtn').addEventListener('click', () => {
   document.getElementById('formView').reset();
   attachedFiles = [];
   renderFileList();
+  document.querySelectorAll('.exDiff').forEach(function (el) { el.textContent = '0'; });
   document.getElementById('doneView').classList.add('hidden');
   document.getElementById('formView').classList.remove('hidden');
+  refreshDocNo();   // ดึงเลขถัดไปมาโชว์ใหม่
   window.scrollTo(0,0);
 });
 </script>

@@ -103,9 +103,9 @@
   /* ช่อง "ระบุ" ของหมวด อื่น ๆ — ต้องเจาะจงกว่า `.f input[type=text]`
      ไม่งั้นจะโดนกฎรวม (width:100%; display:block) ดันตกไปอยู่บรรทัดใหม่ */
   .f .staff-chk input.other-txt{
-    width:78px; display:inline-block; border:none; border-bottom:1px solid #999;
-    background:var(--orange); font-size:9.5px; font-family:inherit;
-    padding:0 2px; margin-left:2px; vertical-align:-1px;
+    width:calc(100% - 62px); display:inline-block; border:none;
+    background:var(--orange); font-size:10px; font-family:inherit;
+    padding:1px 4px; margin-left:4px; vertical-align:-1px;
   }
   .f .staff-chk input.other-txt:focus{outline:1px solid var(--red);}
 
@@ -198,7 +198,8 @@
     /* ตารางเปลี่ยนสินค้าย่อเล็ก → เอาความสูงที่เหลือไปให้ช่องรายละเอียด/ช่องเซ็นแทน */
     .exchange-row td{height:26px;}
     td.notes textarea{min-height:190px;}
-    .sig-blank{height:62px;}
+    /* ช่องเซ็นครอบ 4 แถว (rowspan=4) → ต้องตั้งสูงเกินผลรวมแถวซ้าย ถึงจะดันหน้าให้เต็ม A4 */
+    .sig-blank{height:125px;}
     .sig-role{height:22px;}
     .staff-chk{padding:4px 4px;}
     /* ซ่อนสิ่งที่ไม่ใช่ตัวฟอร์ม */
@@ -283,7 +284,7 @@
       </tr>
       <tr>
         <td class="lbl">วันที่ประชุม</td>
-        <td class="in"><input type="text" id="meetingDate" placeholder="เช่น 2-13 มีค 69"></td>
+        <td class="in"><input type="text" id="meetingDate"></td>
         <td class="lbl">เบอร์โทรศัพท์ลูกค้า</td>
         <td class="in"><input type="tel" id="customerPhone"></td>
         <td class="staff-chk"><label><input type="checkbox" name="category2" value="ออกบิลใหม่"> ออกบิลใหม่</label></td>
@@ -298,12 +299,11 @@
       </tr>
       <tr>
         <td colspan="4" class="blank-cell"></td>
-        <td class="staff-chk">
+        <!-- รวม 3 ช่องขวาเป็นช่องเดียว = "อื่น ๆ" มีที่พิมพ์ข้อความยาว ๆ ได้ -->
+        <td colspan="3" class="staff-chk other-cell">
           <label><input type="checkbox" id="category2OtherChk" name="category2" value="อื่น ๆ"> อื่น ๆ</label>
-          <input type="text" id="category2Other" class="other-txt" placeholder="ระบุ">
+          <input type="text" id="category2Other" class="other-txt">
         </td>
-        <td class="staff-chk"></td><!-- เว้นว่างเผื่อเพิ่มหัวข้อในอนาคต -->
-        <td class="staff-chk"></td><!-- เว้นว่างเผื่อเพิ่มหัวข้อในอนาคต -->
       </tr>
     </table>
 
@@ -386,16 +386,17 @@
         <td class="sig-role disabled-zone">ตรวจสอบใบเสร็จ</td>
         <td class="sig-role disabled-zone">ปิด Project</td>
       </tr>
+      <!-- ช่องเซ็น 7 ช่อง = rowspan 4 (ครอบ 4 แถวซ้าย) เพื่อให้มีที่เซ็นชื่อพอ -->
       <tr>
         <td class="staff-chk disabled-zone"><input type="checkbox" disabled> เงินส่วนกลาง</td>
         <td class="disabled-zone"></td>
-        <td class="sig-blank disabled-zone" rowspan="2"></td>
-        <td class="sig-blank disabled-zone" rowspan="2"></td>
-        <td class="sig-blank disabled-zone" rowspan="2"></td>
-        <td class="sig-blank disabled-zone" rowspan="2"></td>
-        <td class="sig-blank disabled-zone" rowspan="2"></td>
-        <td class="sig-blank disabled-zone" rowspan="2"></td>
-        <td class="sig-blank disabled-zone" rowspan="2"></td>
+        <td class="sig-blank disabled-zone" rowspan="4"></td>
+        <td class="sig-blank disabled-zone" rowspan="4"></td>
+        <td class="sig-blank disabled-zone" rowspan="4"></td>
+        <td class="sig-blank disabled-zone" rowspan="4"></td>
+        <td class="sig-blank disabled-zone" rowspan="4"></td>
+        <td class="sig-blank disabled-zone" rowspan="4"></td>
+        <td class="sig-blank disabled-zone" rowspan="4"></td>
       </tr>
       <tr>
         <td class="staff-chk disabled-zone"><input type="checkbox" disabled> เงินวิชาการ</td>
@@ -404,12 +405,10 @@
       <tr>
         <td class="staff-chk disabled-zone"><input type="checkbox" disabled> ใบสั่งเลขที่ / ลงวันที่</td>
         <td class="disabled-zone"></td>
-        <td colspan="7" class="disabled-zone"></td>
       </tr>
       <tr>
         <td class="ctr lbl disabled-zone" style="font-weight:700;">รวมทั้งสิ้น</td>
         <td class="ctr disabled-zone">-</td>
-        <td colspan="7" class="disabled-zone"></td>
       </tr>
     </table>
 
@@ -439,7 +438,7 @@
   <button id="newFormBtn" type="button">ส่งคำขอใหม่</button>
 </div>
 
-<div class="credit">ใบส้ม Online · v3.3 · 2026-08-06</div>
+<div class="credit">ใบส้ม Online · v3.4 · 2026-08-06</div>
 
 <script>
 // ⚠️ ต้องแก้เป็น URL ของ Apps Script Web App หลัง deploy จริง
@@ -459,7 +458,7 @@ for (let i = 1; i <= EXCHANGE_ROW_COUNT; i++) {
     '<td class="diff exDiff">0</td>' +
     (i === 1
       ? '<td class="notes" rowspan="' + EXCHANGE_ROW_COUNT + '">' +
-          '<textarea id="details" required placeholder="อธิบายรายละเอียดคำขอ และวิธีคิดยอดเงินโดยย่อ&#10;เช่น&#10;ขออนุมัติเบิกค่าติดตั้งแอร์ สาขาเชียงใหม่&#10;ยี่ห้อ YORK จำนวน 2 เครื่อง (ราคาพร้อมติดตั้ง)"></textarea>' +
+          '<textarea id="details" required></textarea>' +
           '<div class="amt-wrap">' +
             '<label>จำนวนเงินรวมทั้งสิ้น (บาท) <span class="req">*</span></label>' +
             '<input type="number" id="totalAmount" min="0" step="0.01" required>' +

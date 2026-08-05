@@ -100,12 +100,14 @@
   .staff-chk input[type=checkbox]{width:11px; height:11px; vertical-align:-1px; margin-right:3px;}
   .staff-chk label{cursor:pointer;}
   .staff-note{font-size:9px; color:#666; font-weight:400;}
-  /* ช่อง "ระบุ" ของหมวด อื่น ๆ */
-  .other-txt{
-    width:52px; border:none; border-bottom:1px solid #999; background:var(--orange);
-    font-size:9.5px; font-family:inherit; padding:0 2px; margin-left:2px;
+  /* ช่อง "ระบุ" ของหมวด อื่น ๆ — ต้องเจาะจงกว่า `.f input[type=text]`
+     ไม่งั้นจะโดนกฎรวม (width:100%; display:block) ดันตกไปอยู่บรรทัดใหม่ */
+  .f .staff-chk input.other-txt{
+    width:78px; display:inline-block; border:none; border-bottom:1px solid #999;
+    background:var(--orange); font-size:9.5px; font-family:inherit;
+    padding:0 2px; margin-left:2px; vertical-align:-1px;
   }
-  .other-txt:focus{outline:1px solid var(--red);}
+  .f .staff-chk input.other-txt:focus{outline:1px solid var(--red);}
 
   /* ตารางรายการสินค้า */
   .items input{background:var(--orange);}

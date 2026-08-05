@@ -89,8 +89,10 @@
 
   .req{color:var(--red); font-weight:700;}
 
-  /* แถบเหลืองซ้ายบน */
-  .warn{background:var(--yellow); font-size:11px; font-weight:700; padding:1px 6px;}
+  /* เซลล์ว่าง (ที่ตัดเนื้อหาออกแล้ว / เว้นไว้เผื่ออนาคต) */
+  .blank-cell{background:#fff;}
+  /* label บนแถบเหลืองโอนเงิน */
+  .y-lbl{background:var(--yellow); font-weight:700;}
 
   /* กล่องสำหรับเจ้าหน้าที่ (มุมขวาบน) */
   .staff-hd{font-size:10.5px; font-weight:700; text-decoration:underline; padding:1px 4px;}
@@ -108,6 +110,12 @@
   /* ตารางรายการสินค้า */
   .items input{background:var(--orange);}
   td.diff{text-align:center; background:#fff;}
+  /* ★ ส่วน "รายละเอียดการเปลี่ยนสินค้า" ใช้งานน้อย → ย่อให้เล็กลงมาก
+     (คงโทนสีเดิม เปลี่ยนแค่ขนาด: คอลัมน์แคบลง + ตัวอักษร/แถวเตี้ยลง) */
+  .items th.hd.sm{font-size:9px; line-height:1.05; padding:0 2px;}
+  .exchange-row td{height:19px;}
+  .exchange-row td.ctr, .exchange-row td.diff{font-size:10px;}
+  .exchange-row input{padding:1px 3px; font-size:10.5px;}
 
   /* กล่องอื่นๆ ด้านขวา */
   td.notes{vertical-align:top; padding:0; background:var(--orange-soft);}
@@ -185,10 +193,12 @@
        ต้องเพิ่ม "ความสูง" อย่างเดียว */
     table.f td, table.f th{padding:3px 4px;}
     .ph{padding:8px;}
-    .exchange-row td{height:56px;}
-    td.notes textarea{min-height:150px;}
-    .sig-blank{height:58px;}
-    .sig-role{height:20px;}
+    /* ตารางเปลี่ยนสินค้าย่อเล็ก → เอาความสูงที่เหลือไปให้ช่องรายละเอียด/ช่องเซ็นแทน */
+    .exchange-row td{height:26px;}
+    td.notes textarea{min-height:190px;}
+    .sig-blank{height:62px;}
+    .sig-role{height:22px;}
+    .staff-chk{padding:4px 4px;}
     /* ซ่อนสิ่งที่ไม่ใช่ตัวฟอร์ม */
     .hint-scroll, .docbtns, #errBox, .credit, #fileHint, #fileInput{display:none !important;}
     /* ช่องกรอกให้พิมพ์ออกมาเป็นเส้นตารางเปล่า อ่านง่ายเหมือนกระดาษจริง */
@@ -196,7 +206,7 @@
       background:transparent !important; -webkit-print-color-adjust:exact; print-color-adjust:exact;
     }
     .f td.in, .f td.in-y, td.notes, .amt-wrap, .proof,
-    .warn, .staff-chk, .disabled-zone, table.f thead th, .sec-title{
+    .y-lbl, .staff-chk, .disabled-zone, table.f th{
       -webkit-print-color-adjust:exact; print-color-adjust:exact;
     }
     textarea{overflow:visible !important;}
@@ -239,13 +249,13 @@
         <col style="width:145px"><col style="width:182px"><col style="width:183px">
       </colgroup>
       <tr>
-        <td colspan="4" class="warn">ขอเอกสาร, หลักฐานแนบการเบิกทุกครั้ง</td>
+        <td colspan="4" class="blank-cell"></td>
         <td colspan="3" class="staff-hd">หมวดที่จะแจ้ง</td>
       </tr>
       <tr>
         <td class="lbl">ลงชื่อผู้เบิก <span class="req">*</span></td>
         <td class="in"><input type="text" id="requester" required></td>
-        <td class="lbl">แผนก / BU</td>
+        <td class="lbl">แผนก</td>
         <td class="in"><input type="text" id="department"></td>
         <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่าลงทะเบียนลูกค้า"> ค่าลงทะเบียนลูกค้า</label></td>
         <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่ารับรองลูกค้า"> ค่ารับรองลูกค้า</label></td>
@@ -276,67 +286,68 @@
         <td class="in"><input type="tel" id="customerPhone"></td>
         <td class="staff-chk"><label><input type="checkbox" name="category2" value="ออกบิลใหม่"> ออกบิลใหม่</label></td>
         <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่า Booth"> ค่า Booth</label></td>
+        <td class="staff-chk"></td><!-- เว้นว่างเผื่อเพิ่มหัวข้อในอนาคต -->
+      </tr>
+      <tr>
+        <td colspan="4" class="blank-cell"></td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ประชุมวิชาการ"> ประชุมวิชาการ</label></td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ดูงานต่างประเทศ"> ดูงานต่างประเทศ</label></td>
+        <td class="staff-chk"></td><!-- เว้นว่างเผื่อเพิ่มหัวข้อในอนาคต -->
+      </tr>
+      <tr>
+        <td colspan="4" class="blank-cell"></td>
         <td class="staff-chk">
           <label><input type="checkbox" id="category2OtherChk" name="category2" value="อื่น ๆ"> อื่น ๆ</label>
           <input type="text" id="category2Other" class="other-txt" placeholder="ระบุ">
         </td>
-      </tr>
-      <tr>
-        <td class="lbl">หมวด / เรื่องที่ขอเบิก <span class="req">*</span></td>
-        <td class="in" colspan="3"><input type="text" id="category" placeholder="เช่น ขออนุมัติเบิกค่าติดตั้งแอร์ สาขาเชียงใหม่" required></td>
-        <td class="staff-chk"><input type="checkbox" name="purposeType" value="ประชุมวิชาการ"> ประชุมวิชาการ</td>
-        <td class="staff-chk"><input type="checkbox" name="purposeType" value="ดูงานต่างประเทศ"> ดูงานต่างประเทศ</td>
-        <td class="staff-chk"><input type="checkbox" name="purposeType" value="อื่นๆ"> อื่นๆ</td>
+        <td class="staff-chk"></td><!-- เว้นว่างเผื่อเพิ่มหัวข้อในอนาคต -->
+        <td class="staff-chk"></td><!-- เว้นว่างเผื่อเพิ่มหัวข้อในอนาคต -->
       </tr>
     </table>
 
     <!-- ตารางรายการสินค้า + ช่องอื่นๆ ด้านขวา -->
     <table class="f items">
       <colgroup>
-        <col style="width:48px"><col style="width:172px"><col style="width:84px">
-        <col style="width:172px"><col style="width:84px"><col style="width:74px">
-        <col style="width:446px">
+        <col style="width:34px"><col style="width:110px"><col style="width:62px">
+        <col style="width:110px"><col style="width:62px"><col style="width:58px">
+        <col style="width:644px">
       </colgroup>
       <tr>
-        <th class="hd">ลำดับ</th>
-        <th class="hd">รหัสสินค้าที่จะเปลี่ยน</th>
-        <th class="hd">ราคา</th>
-        <th class="hd">รหัสสินค้าที่ต้องการ</th>
-        <th class="hd">ราคา</th>
-        <th class="hd">ส่วนต่าง</th>
-        <th class="hd">อื่นๆ (ค่าลงทะเบียน , ค่าที่พัก , ค่าอาหาร ฯลฯ) <span class="req">*</span></th>
+        <th class="hd sm">ลำดับ</th>
+        <th class="hd sm">รหัสสินค้าที่จะเปลี่ยน</th>
+        <th class="hd sm">ราคา</th>
+        <th class="hd sm">รหัสสินค้าที่ต้องการ</th>
+        <th class="hd sm">ราคา</th>
+        <th class="hd sm">ส่วนต่าง</th>
+        <th class="hd">รายละเอียด <span class="req">*</span></th>
       </tr>
       <tbody id="exchangeRows"></tbody>
       <tr>
-        <td colspan="6" class="lbl" style="text-align:right;">อ้างอิงเลขที่บิล</td>
-        <td class="proof" rowspan="2">
-          <input type="checkbox" id="needPaymentProof">
-          ขอให้ส่งหลักฐานการชำระเงินกลับให้ผู้แจ้งเบิกด้วย เพื่อแจ้งให้ลูกค้าทราบ
+        <td colspan="6" class="blank-cell"></td>
+        <td class="proof">
+          <label><input type="checkbox" id="needPaymentProof">
+          ขอให้ส่งหลักฐานการชำระเงินกลับให้ผู้แจ้งเบิกด้วย เพื่อแจ้งให้ลูกค้าทราบ</label>
         </td>
-      </tr>
-      <tr>
-        <td colspan="6" class="in"><input type="text" id="refBillNo"></td>
       </tr>
     </table>
 
     <!-- แถบเหลือง: ระบุโอนเงินให้ -->
     <table class="f">
       <colgroup>
-        <col style="width:130px"><col style="width:330px">
-        <col style="width:90px"><col style="width:200px">
-        <col style="width:90px"><col style="width:240px">
+        <col style="width:120px"><col style="width:230px">
+        <col style="width:60px"><col style="width:170px">
+        <col style="width:50px"><col style="width:150px">
+        <col style="width:70px"><col style="width:230px">
       </colgroup>
       <tr>
-        <td class="lbl" style="background:var(--yellow); font-weight:700;">ระบุโอนเงินให้ — ชื่อ</td>
+        <td class="lbl y-lbl">ระบุโอนเงินให้ — ชื่อ</td>
         <td class="in-y"><input type="text" id="transferName"></td>
-        <td class="lbl" style="background:var(--yellow); font-weight:700;">ธนาคาร</td>
+        <td class="lbl y-lbl">ธนาคาร</td>
         <td class="in-y"><input type="text" id="transferBank"></td>
-        <td class="lbl" style="background:var(--yellow); font-weight:700;">สาขา</td>
+        <td class="lbl y-lbl">สาขา</td>
         <td class="in-y"><input type="text" id="transferBranch"></td>
-      </tr>
-      <tr>
-        <td class="lbl" style="background:var(--yellow); font-weight:700;">เลขบัญชี</td>
-        <td class="in-y" colspan="5"><input type="text" id="transferAccountNo"></td>
+        <td class="lbl y-lbl">เลขบัญชี</td>
+        <td class="in-y"><input type="text" id="transferAccountNo"></td>
       </tr>
     </table>
 
@@ -374,15 +385,19 @@
         <td class="sig-role disabled-zone">ปิด Project</td>
       </tr>
       <tr>
+        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> เงินส่วนกลาง</td>
+        <td class="disabled-zone"></td>
+        <td class="sig-blank disabled-zone" rowspan="2"></td>
+        <td class="sig-blank disabled-zone" rowspan="2"></td>
+        <td class="sig-blank disabled-zone" rowspan="2"></td>
+        <td class="sig-blank disabled-zone" rowspan="2"></td>
+        <td class="sig-blank disabled-zone" rowspan="2"></td>
+        <td class="sig-blank disabled-zone" rowspan="2"></td>
+        <td class="sig-blank disabled-zone" rowspan="2"></td>
+      </tr>
+      <tr>
         <td class="staff-chk disabled-zone"><input type="checkbox" disabled> เงินวิชาการ</td>
         <td class="disabled-zone"></td>
-        <td class="sig-blank disabled-zone"></td>
-        <td class="sig-blank disabled-zone"></td>
-        <td class="sig-blank disabled-zone"></td>
-        <td class="sig-blank disabled-zone"></td>
-        <td class="sig-blank disabled-zone"></td>
-        <td class="sig-blank disabled-zone"></td>
-        <td class="sig-blank disabled-zone"></td>
       </tr>
       <tr>
         <td class="staff-chk disabled-zone"><input type="checkbox" disabled> ใบสั่งเลขที่ / ลงวันที่</td>
@@ -422,7 +437,7 @@
   <button id="newFormBtn" type="button">ส่งคำขอใหม่</button>
 </div>
 
-<div class="credit">ใบส้ม Online · v3.2 · 2026-08-06</div>
+<div class="credit">ใบส้ม Online · v3.3 · 2026-08-06</div>
 
 <script>
 // ⚠️ ต้องแก้เป็น URL ของ Apps Script Web App หลัง deploy จริง
@@ -507,7 +522,6 @@ function setVal(id, v) {
 function fillForm(d) {
   setVal('requester', d.requester);
   setVal('department', d.department);
-  setVal('category', d.category);
   setVal('meetingName', d.meetingName);
   setVal('meetingPlace', d.meetingPlace);
   setVal('meetingDate', d.meetingDate);
@@ -522,13 +536,10 @@ function fillForm(d) {
   setVal('transferAccountNo', d.transferAccountNo);
   document.getElementById('needPaymentProof').checked = !!d.needPaymentProof;
 
-  var want = d.purposeType || [];
-  document.querySelectorAll('input[name=purposeType]').forEach(function (c) {
-    c.checked = want.indexOf(c.value) >= 0;
-  });
-
   // หมวดที่จะแจ้ง — ค่า "อื่น ๆ: xxx" ต้องแยกข้อความกลับมาใส่ช่องระบุ
-  var cats = d.category2 || [];
+  // (ใบเก่าที่บันทึกก่อน v3.3 เก็บ ประชุมวิชาการ/ดูงานต่างประเทศ ไว้คอลัมน์ purposeType
+  //  ตอนนี้ย้ายมารวมใน category2 แล้ว → รวมสองแหล่งเข้าด้วยกันตอนโหลด)
+  var cats = (d.category2 || []).concat(d.purposeType || []);
   var otherEntry = cats.filter(function (v) { return v.indexOf('อื่น ๆ') === 0; })[0] || '';
   setVal('category2Other', otherEntry.indexOf(':') > 0 ? otherEntry.split(':').slice(1).join(':').trim() : '');
   document.querySelectorAll('input[name=category2]').forEach(function (c) {
@@ -545,7 +556,6 @@ function fillForm(d) {
     row.querySelector('.exNewCode').value = it.newCode || '';
     row.querySelector('.exNewPrice').value = it.newPrice || '';
     row.querySelector('.exReturnPrice').dispatchEvent(new Event('input'));
-    if (i === 0) setVal('refBillNo', it.refBillNo || '');
   });
 }
 
@@ -611,11 +621,10 @@ document.getElementById('formView').addEventListener('submit', async (e) => {
   hideError();
 
   const requester = document.getElementById('requester').value.trim();
-  const category = document.getElementById('category').value.trim();
   const details = document.getElementById('details').value.trim();
   const totalAmount = document.getElementById('totalAmount').value;
 
-  if (!requester || !category || !details || totalAmount === '') {
+  if (!requester || !details || totalAmount === '') {
     showError('กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบก่อนส่งคำขอ');
     return;
   }
@@ -627,9 +636,6 @@ document.getElementById('formView').addEventListener('submit', async (e) => {
     showError('ยังไม่ได้ตั้งค่า APPS_SCRIPT_URL ในโค้ด (สำหรับผู้ดูแลระบบ)');
     return;
   }
-
-  const purposeType = Array.from(document.querySelectorAll('input[name=purposeType]:checked')).map(el => el.value);
-  const refBillNo = document.getElementById('refBillNo').value.trim();
 
   // หมวดที่จะแจ้ง (ติ๊กได้หลายช่อง) — ช่อง "อื่น ๆ" ถ้าระบุข้อความไว้ให้ต่อท้าย
   const otherTxt = document.getElementById('category2Other').value.trim();
@@ -643,15 +649,12 @@ document.getElementById('formView').addEventListener('submit', async (e) => {
       returnPrice: row.querySelector('.exReturnPrice').value.trim(),
       newCode: row.querySelector('.exNewCode').value.trim(),
       newPrice: row.querySelector('.exNewPrice').value.trim(),
-      refBillNo: refBillNo,
     });
   });
 
   const payload = {
     requester,
     department: document.getElementById('department').value.trim(),
-    category,
-    purposeType,
     category2,
     meetingName: document.getElementById('meetingName').value.trim(),
     meetingPlace: document.getElementById('meetingPlace').value.trim(),

@@ -95,8 +95,15 @@
   /* กล่องสำหรับเจ้าหน้าที่ (มุมขวาบน) */
   .staff-hd{font-size:10.5px; font-weight:700; text-decoration:underline; padding:1px 4px;}
   .staff-chk{font-size:10px; white-space:nowrap; padding:1px 4px;}
-  .staff-chk input{width:11px; height:11px; vertical-align:-1px; margin-right:3px;}
+  .staff-chk input[type=checkbox]{width:11px; height:11px; vertical-align:-1px; margin-right:3px;}
+  .staff-chk label{cursor:pointer;}
   .staff-note{font-size:9px; color:#666; font-weight:400;}
+  /* ช่อง "ระบุ" ของหมวด อื่น ๆ */
+  .other-txt{
+    width:52px; border:none; border-bottom:1px solid #999; background:var(--orange);
+    font-size:9.5px; font-family:inherit; padding:0 2px; margin-left:2px;
+  }
+  .other-txt:focus{outline:1px solid var(--red);}
 
   /* ตารางรายการสินค้า */
   .items input{background:var(--orange);}
@@ -233,43 +240,46 @@
       </colgroup>
       <tr>
         <td colspan="4" class="warn">ขอเอกสาร, หลักฐานแนบการเบิกทุกครั้ง</td>
-        <td colspan="3" class="staff-hd">สำหรับเจ้าหน้าที่ <span class="staff-note">(เจ้าหน้าที่ติ๊กภายหลัง)</span></td>
+        <td colspan="3" class="staff-hd">หมวดที่จะแจ้ง</td>
       </tr>
       <tr>
         <td class="lbl">ลงชื่อผู้เบิก <span class="req">*</span></td>
         <td class="in"><input type="text" id="requester" required></td>
         <td class="lbl">แผนก / BU</td>
         <td class="in"><input type="text" id="department"></td>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> ค่าลงทะเบียนลูกค้า</td>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> ค่ารับรองลูกค้า</td>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> ค่าสวัสดิการ รพ.</td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่าลงทะเบียนลูกค้า"> ค่าลงทะเบียนลูกค้า</label></td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่ารับรองลูกค้า"> ค่ารับรองลูกค้า</label></td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่าสวัสดิการ รพ."> ค่าสวัสดิการ รพ.</label></td>
       </tr>
       <tr>
         <td class="lbl">ชื่องานประชุม</td>
         <td class="in"><input type="text" id="meetingName"></td>
         <td class="lbl">สถานที่ประชุม</td>
         <td class="in"><input type="text" id="meetingPlace"></td>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> ของแถม</td>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> ค่าตั๋วเครื่องบินลูกค้า/พนักงาน</td>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> ค่าสวัสดิการพนักงาน</td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ของแถม"> ของแถม</label></td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่าตั๋วเครื่องบินลูกค้า/พนักงาน"> ค่าตั๋วเครื่องบินลูกค้า/พนักงาน</label></td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่าสวัสดิการพนักงาน"> ค่าสวัสดิการพนักงาน</label></td>
       </tr>
       <tr>
         <td class="lbl">ชื่อลูกค้า</td>
         <td class="in"><input type="text" id="customerName"></td>
         <td class="lbl">ชื่อโรงพยาบาล</td>
         <td class="in"><input type="text" id="hospitalName"></td>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> การเปลี่ยนของ</td>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> ค่าโรงแรมลูกค้า / พนักงาน</td>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> ค่าของใช้ในสำนักงาน</td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="การเปลี่ยนของ"> การเปลี่ยนของ</label></td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่าโรงแรมลูกค้า / พนักงาน"> ค่าโรงแรมลูกค้า / พนักงาน</label></td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่าของใช้ในสำนักงาน"> ค่าของใช้ในสำนักงาน</label></td>
       </tr>
       <tr>
         <td class="lbl">วันที่ประชุม</td>
         <td class="in"><input type="text" id="meetingDate" placeholder="เช่น 2-13 มีค 69"></td>
         <td class="lbl">เบอร์โทรศัพท์ลูกค้า</td>
         <td class="in"><input type="tel" id="customerPhone"></td>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> ออกบิลใหม่</td>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> ค่า Booth</td>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> อื่น ๆ __________</td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ออกบิลใหม่"> ออกบิลใหม่</label></td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่า Booth"> ค่า Booth</label></td>
+        <td class="staff-chk">
+          <label><input type="checkbox" id="category2OtherChk" name="category2" value="อื่น ๆ"> อื่น ๆ</label>
+          <input type="text" id="category2Other" class="other-txt" placeholder="ระบุ">
+        </td>
       </tr>
       <tr>
         <td class="lbl">หมวด / เรื่องที่ขอเบิก <span class="req">*</span></td>
@@ -412,7 +422,7 @@
   <button id="newFormBtn" type="button">ส่งคำขอใหม่</button>
 </div>
 
-<div class="credit">ใบส้ม Online · v3.0 · 2026-08-05</div>
+<div class="credit">ใบส้ม Online · v3.2 · 2026-08-06</div>
 
 <script>
 // ⚠️ ต้องแก้เป็น URL ของ Apps Script Web App หลัง deploy จริง
@@ -517,6 +527,16 @@ function fillForm(d) {
     c.checked = want.indexOf(c.value) >= 0;
   });
 
+  // หมวดที่จะแจ้ง — ค่า "อื่น ๆ: xxx" ต้องแยกข้อความกลับมาใส่ช่องระบุ
+  var cats = d.category2 || [];
+  var otherEntry = cats.filter(function (v) { return v.indexOf('อื่น ๆ') === 0; })[0] || '';
+  setVal('category2Other', otherEntry.indexOf(':') > 0 ? otherEntry.split(':').slice(1).join(':').trim() : '');
+  document.querySelectorAll('input[name=category2]').forEach(function (c) {
+    c.checked = (c.value === 'อื่น ๆ')
+      ? !!otherEntry
+      : cats.indexOf(c.value) >= 0;
+  });
+
   var items = d.exchangeItems || [];
   document.querySelectorAll('.exchange-row').forEach(function (row, i) {
     var it = items[i] || {};
@@ -611,6 +631,11 @@ document.getElementById('formView').addEventListener('submit', async (e) => {
   const purposeType = Array.from(document.querySelectorAll('input[name=purposeType]:checked')).map(el => el.value);
   const refBillNo = document.getElementById('refBillNo').value.trim();
 
+  // หมวดที่จะแจ้ง (ติ๊กได้หลายช่อง) — ช่อง "อื่น ๆ" ถ้าระบุข้อความไว้ให้ต่อท้าย
+  const otherTxt = document.getElementById('category2Other').value.trim();
+  const category2 = Array.from(document.querySelectorAll('input[name=category2]:checked'))
+    .map(el => (el.value === 'อื่น ๆ' && otherTxt) ? ('อื่น ๆ: ' + otherTxt) : el.value);
+
   const exchangeItems = [];
   document.querySelectorAll('.exchange-row').forEach(row => {
     exchangeItems.push({
@@ -627,6 +652,7 @@ document.getElementById('formView').addEventListener('submit', async (e) => {
     department: document.getElementById('department').value.trim(),
     category,
     purposeType,
+    category2,
     meetingName: document.getElementById('meetingName').value.trim(),
     meetingPlace: document.getElementById('meetingPlace').value.trim(),
     meetingDate: document.getElementById('meetingDate').value.trim(),

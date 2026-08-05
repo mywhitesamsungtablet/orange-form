@@ -81,6 +81,11 @@
     padding:2px 5px; font-size:12px; font-family:inherit; color:var(--ink);
     display:block;
   }
+  /* ★ ซ่อนหัวลูกศรขึ้น-ลงของช่องตัวเลข (ช่องราคา/จำนวนเงิน) — กดเพิ่มลดทีละสตางค์ใช้ไม่ถนัด
+     ยังคง type=number ไว้ เพราะบนมือถือจะเด้งแป้นตัวเลขให้เอง (พนักงานสแกน QR กรอกจากมือถือ) */
+  .f input[type=number]::-webkit-outer-spin-button,
+  .f input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none; margin:0;}
+  .f input[type=number]{-moz-appearance:textfield; appearance:textfield;}
   .f input:focus, .f textarea:focus{outline:2px solid var(--red); position:relative; z-index:2;}
   .f td.in{padding:0; background:var(--orange);}
   .f td.in-y{padding:0; background:var(--yellow);}
@@ -199,7 +204,7 @@
     .exchange-row td{height:26px;}
     td.notes textarea{min-height:190px;}
     /* ช่องเซ็นครอบ 4 แถว (rowspan=4) → ต้องตั้งสูงเกินผลรวมแถวซ้าย ถึงจะดันหน้าให้เต็ม A4 */
-    .sig-blank{height:125px;}
+    .sig-blank{height:138px;}
     .sig-role{height:22px;}
     .staff-chk{padding:4px 4px;}
     /* ซ่อนสิ่งที่ไม่ใช่ตัวฟอร์ม */
@@ -251,54 +256,53 @@
         <col style="width:105px"><col style="width:160px">
         <col style="width:145px"><col style="width:182px"><col style="width:183px">
       </colgroup>
+      <!-- ★ ฝั่งซ้าย 4 ช่องแรกใช้ rowspan=2 กินพื้นที่ว่างที่เคยเป็นช่องเปล่าไปเลย
+           (7 แถว = 2+2+2+1) → ไม่มีช่องขาวว่างเปล่าเหลืออยู่ + ช่องกรอกสูงขึ้นเขียนง่ายขึ้น -->
       <tr>
-        <td colspan="4" class="blank-cell"></td>
+        <td class="lbl" rowspan="2">ลงชื่อผู้เบิก <span class="req">*</span></td>
+        <td class="in" rowspan="2"><input type="text" id="requester" required></td>
+        <td class="lbl" rowspan="2">แผนก</td>
+        <td class="in" rowspan="2"><input type="text" id="department"></td>
         <td colspan="3" class="staff-hd">หมวดที่จะแจ้ง</td>
       </tr>
       <tr>
-        <td class="lbl">ลงชื่อผู้เบิก <span class="req">*</span></td>
-        <td class="in"><input type="text" id="requester" required></td>
-        <td class="lbl">แผนก</td>
-        <td class="in"><input type="text" id="department"></td>
         <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่าลงทะเบียนลูกค้า"> ค่าลงทะเบียนลูกค้า</label></td>
         <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่ารับรองลูกค้า"> ค่ารับรองลูกค้า</label></td>
         <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่าสวัสดิการ รพ."> ค่าสวัสดิการ รพ.</label></td>
       </tr>
       <tr>
-        <td class="lbl">ชื่องานประชุม</td>
-        <td class="in"><input type="text" id="meetingName"></td>
-        <td class="lbl">สถานที่ประชุม</td>
-        <td class="in"><input type="text" id="meetingPlace"></td>
+        <td class="lbl" rowspan="2">ชื่องานประชุม</td>
+        <td class="in" rowspan="2"><input type="text" id="meetingName"></td>
+        <td class="lbl" rowspan="2">สถานที่ประชุม</td>
+        <td class="in" rowspan="2"><input type="text" id="meetingPlace"></td>
         <td class="staff-chk"><label><input type="checkbox" name="category2" value="ของแถม"> ของแถม</label></td>
         <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่าตั๋วเครื่องบินลูกค้า/พนักงาน"> ค่าตั๋วเครื่องบินลูกค้า/พนักงาน</label></td>
         <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่าสวัสดิการพนักงาน"> ค่าสวัสดิการพนักงาน</label></td>
       </tr>
       <tr>
-        <td class="lbl">ชื่อลูกค้า</td>
-        <td class="in"><input type="text" id="customerName"></td>
-        <td class="lbl">ชื่อโรงพยาบาล</td>
-        <td class="in"><input type="text" id="hospitalName"></td>
         <td class="staff-chk"><label><input type="checkbox" name="category2" value="การเปลี่ยนของ"> การเปลี่ยนของ</label></td>
         <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่าโรงแรมลูกค้า / พนักงาน"> ค่าโรงแรมลูกค้า / พนักงาน</label></td>
         <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่าของใช้ในสำนักงาน"> ค่าของใช้ในสำนักงาน</label></td>
+      </tr>
+      <tr>
+        <td class="lbl" rowspan="2">ชื่อลูกค้า</td>
+        <td class="in" rowspan="2"><input type="text" id="customerName"></td>
+        <td class="lbl" rowspan="2">ชื่อโรงพยาบาล</td>
+        <td class="in" rowspan="2"><input type="text" id="hospitalName"></td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ออกบิลใหม่"> ออกบิลใหม่</label></td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่า Booth"> ค่า Booth</label></td>
+        <td class="staff-chk"></td><!-- เว้นว่างเผื่อเพิ่มหัวข้อในอนาคต -->
+      </tr>
+      <tr>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ประชุมวิชาการ"> ประชุมวิชาการ</label></td>
+        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ดูงานต่างประเทศ"> ดูงานต่างประเทศ</label></td>
+        <td class="staff-chk"></td><!-- เว้นว่างเผื่อเพิ่มหัวข้อในอนาคต -->
       </tr>
       <tr>
         <td class="lbl">วันที่ประชุม</td>
         <td class="in"><input type="text" id="meetingDate"></td>
         <td class="lbl">เบอร์โทรศัพท์ลูกค้า</td>
         <td class="in"><input type="tel" id="customerPhone"></td>
-        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ออกบิลใหม่"> ออกบิลใหม่</label></td>
-        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ค่า Booth"> ค่า Booth</label></td>
-        <td class="staff-chk"></td><!-- เว้นว่างเผื่อเพิ่มหัวข้อในอนาคต -->
-      </tr>
-      <tr>
-        <td colspan="4" class="blank-cell"></td>
-        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ประชุมวิชาการ"> ประชุมวิชาการ</label></td>
-        <td class="staff-chk"><label><input type="checkbox" name="category2" value="ดูงานต่างประเทศ"> ดูงานต่างประเทศ</label></td>
-        <td class="staff-chk"></td><!-- เว้นว่างเผื่อเพิ่มหัวข้อในอนาคต -->
-      </tr>
-      <tr>
-        <td colspan="4" class="blank-cell"></td>
         <!-- รวม 3 ช่องขวาเป็นช่องเดียว = "อื่น ๆ" มีที่พิมพ์ข้อความยาว ๆ ได้ -->
         <td colspan="3" class="staff-chk other-cell">
           <label><input type="checkbox" id="category2OtherChk" name="category2" value="อื่น ๆ"> อื่น ๆ</label>
@@ -323,14 +327,9 @@
         <th class="hd sm">ส่วนต่าง</th>
         <th class="hd">รายละเอียด <span class="req">*</span></th>
       </tr>
+      <!-- ช่องติ๊ก "ขอหลักฐานการชำระเงิน" ย้ายไปอยู่ในช่องรายละเอียดแล้ว
+           (เดิมเป็นแถวแยกที่มีช่องขาวว่างเปล่ายาว 6 ช่องทางซ้าย) -->
       <tbody id="exchangeRows"></tbody>
-      <tr>
-        <td colspan="6" class="blank-cell"></td>
-        <td class="proof">
-          <label><input type="checkbox" id="needPaymentProof">
-          ขอให้ส่งหลักฐานการชำระเงินกลับให้ผู้แจ้งเบิกด้วย เพื่อแจ้งให้ลูกค้าทราบ</label>
-        </td>
-      </tr>
     </table>
 
     <!-- แถบเหลือง: ระบุโอนเงินให้ -->
@@ -438,7 +437,7 @@
   <button id="newFormBtn" type="button">ส่งคำขอใหม่</button>
 </div>
 
-<div class="credit">ใบส้ม Online · v3.4 · 2026-08-06</div>
+<div class="credit">ใบส้ม Online · v3.5 · 2026-08-06</div>
 
 <script>
 // ⚠️ ต้องแก้เป็น URL ของ Apps Script Web App หลัง deploy จริง
@@ -463,6 +462,10 @@ for (let i = 1; i <= EXCHANGE_ROW_COUNT; i++) {
             '<label>จำนวนเงินรวมทั้งสิ้น (บาท) <span class="req">*</span></label>' +
             '<input type="number" id="totalAmount" min="0" step="0.01" required>' +
           '</div>' +
+          '<div class="proof"><label>' +
+            '<input type="checkbox" id="needPaymentProof"> ' +
+            'ขอให้ส่งหลักฐานการชำระเงินกลับให้ผู้แจ้งเบิกด้วย เพื่อแจ้งให้ลูกค้าทราบ' +
+          '</label></div>' +
         '</td>'
       : '');
   exchangeRowsEl.appendChild(tr);
@@ -477,6 +480,13 @@ for (let i = 1; i <= EXCHANGE_ROW_COUNT; i++) {
   returnPriceEl.addEventListener('input', updateDiff);
   newPriceEl.addEventListener('input', updateDiff);
 }
+
+// ปัดลูกกลิ้งเมาส์แล้วอย่าไปเปลี่ยนตัวเลขในช่องราคา (พฤติกรรมติดมากับ type=number)
+document.querySelectorAll('.f input[type=number]').forEach(function (el) {
+  el.addEventListener('wheel', function () {
+    if (document.activeElement === el) el.blur();
+  });
+});
 
 /** เรียก backend (ทุก endpoint เป็น POST + field action) */
 function callApi(payload) {

@@ -166,15 +166,24 @@
   @media print{
     body{background:#fff; padding:0;}
     .paper-scroll{overflow:visible; padding:0;}
-    /* A4 นอน 297mm หัก margin 5mm สองข้าง = 287mm → ตั้งความกว้างเป็น mm ตรง ๆ
+    /* กว้าง = พื้นที่พิมพ์พอดีเป๊ะ (อย่าใส่ค่า mm ตายตัว เพราะถ้าเกินจะตกขอบขวา)
        (ห้ามใช้ transform:scale เพราะไม่ลดกล่อง layout จริง → ยังตัดหน้าเป็น 2 แผ่น)
        ตารางทุกตัวเป็น table-layout:fixed + width:100% → คอลัมน์ px ย่อตามสัดส่วนเอง */
     .paper{
-      width:284mm; border:1.5px solid #000;
+      width:100%; border:1.5px solid #000;
       page-break-inside:avoid; break-inside:avoid;
     }
+    /* ★ ยืดแถวให้เต็มความสูง A4 นอน (บนจอบีบเตี้ยเพื่อให้พอดีจอ แต่ตอนพิมพ์ให้เต็มแผ่น)
+       สัดส่วนฟอร์ม (กว้าง:สูง ≈ 1.95) แบนกว่ากระดาษ A4 นอน (≈1.44) → ขยายเท่ากันทุกทิศไม่ได้
+       ต้องเพิ่ม "ความสูง" อย่างเดียว */
+    table.f td, table.f th{padding:3px 4px;}
+    .ph{padding:8px;}
+    .exchange-row td{height:56px;}
+    td.notes textarea{min-height:150px;}
+    .sig-blank{height:58px;}
+    .sig-role{height:20px;}
     /* ซ่อนสิ่งที่ไม่ใช่ตัวฟอร์ม */
-    .hint-scroll, .docbtns, #errBox, .credit, #fileHint{display:none !important;}
+    .hint-scroll, .docbtns, #errBox, .credit, #fileHint, #fileInput{display:none !important;}
     /* ช่องกรอกให้พิมพ์ออกมาเป็นเส้นตารางเปล่า อ่านง่ายเหมือนกระดาษจริง */
     .f input, .f textarea, .amt-wrap input{
       background:transparent !important; -webkit-print-color-adjust:exact; print-color-adjust:exact;

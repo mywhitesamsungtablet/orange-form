@@ -108,11 +108,13 @@
   /* ช่อง "ระบุ" ของหมวด อื่น ๆ — ต้องเจาะจงกว่า `.f input[type=text]`
      ไม่งั้นจะโดนกฎรวม (width:100%; display:block) ดันตกไปอยู่บรรทัดใหม่ */
   .f .staff-chk input.other-txt{
-    width:calc(100% - 62px); display:inline-block; border:none;
-    background:var(--orange); font-size:10px; font-family:inherit;
-    padding:1px 4px; margin-left:4px; vertical-align:-1px;
+    width:calc(100% - 62px); height:26px; display:inline-block; border:none;
+    background:var(--orange); font-size:11px; font-family:inherit;
+    padding:1px 5px; margin-left:4px; vertical-align:-8px;
   }
   .f .staff-chk input.other-txt:focus{outline:1px solid var(--red);}
+  /* แถวสุดท้ายของตารางหัวข้อมูล: สูงเท่าแถวที่ merge 2 แถวข้างบน */
+  tr.info-last td{height:32px;}
 
   /* ตารางรายการสินค้า */
   .items input{background:var(--orange);}
@@ -123,6 +125,9 @@
   .exchange-row td{height:19px;}
   .exchange-row td.ctr, .exchange-row td.diff{font-size:10px;}
   .exchange-row input{padding:1px 3px; font-size:10.5px;}
+  /* แถวสรุปรวมท้ายตารางเปลี่ยนสินค้า (คิดอัตโนมัติ แก้เองไม่ได้) */
+  .ex-total td{background:#fff; font-size:10.5px; font-weight:700; height:19px;}
+  .ex-total td.ctr.lbl{text-align:right; font-size:10px;}
 
   /* กล่องอื่นๆ ด้านขวา */
   td.notes{vertical-align:top; padding:0; background:var(--orange-soft);}
@@ -204,7 +209,7 @@
     .exchange-row td{height:26px;}
     td.notes textarea{min-height:190px;}
     /* ช่องเซ็นครอบ 4 แถว (rowspan=4) → ต้องตั้งสูงเกินผลรวมแถวซ้าย ถึงจะดันหน้าให้เต็ม A4 */
-    .sig-blank{height:138px;}
+    .sig-blank{height:128px;}
     .sig-role{height:22px;}
     .staff-chk{padding:4px 4px;}
     /* ซ่อนสิ่งที่ไม่ใช่ตัวฟอร์ม */
@@ -298,7 +303,8 @@
         <td class="staff-chk"><label><input type="checkbox" name="category2" value="ดูงานต่างประเทศ"> ดูงานต่างประเทศ</label></td>
         <td class="staff-chk"></td><!-- เว้นว่างเผื่อเพิ่มหัวข้อในอนาคต -->
       </tr>
-      <tr>
+      <!-- แถวสุดท้ายตั้งความสูงเท่าแถว rowspan=2 ข้างบน = สมมาตร + ช่อง "อื่น ๆ" ได้ที่เพิ่ม -->
+      <tr class="info-last">
         <td class="lbl">วันที่ประชุม</td>
         <td class="in"><input type="text" id="meetingDate"></td>
         <td class="lbl">เบอร์โทรศัพท์ลูกค้า</td>
@@ -375,7 +381,8 @@
         <td class="sig-name disabled-zone">กาญจนา</td>
       </tr>
       <tr>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> ส่งเสริมการขาย</td>
+        <!-- ★ 4 ช่องนี้ = ผู้แทนติ๊กเอง (ไม่ใช่โซนเจ้าหน้าที่) → พื้นขาว + ติ๊กได้ -->
+        <td class="staff-chk"><label><input type="checkbox" name="advanceType" value="ส่งเสริมการขาย"> ส่งเสริมการขาย</label></td>
         <td class="disabled-zone"></td>
         <td class="sig-role disabled-zone">อนุมัติ</td>
         <td class="sig-role disabled-zone">ตรวจสอบเอกสาร</td>
@@ -387,7 +394,7 @@
       </tr>
       <!-- ช่องเซ็น 7 ช่อง = rowspan 4 (ครอบ 4 แถวซ้าย) เพื่อให้มีที่เซ็นชื่อพอ -->
       <tr>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> เงินส่วนกลาง</td>
+        <td class="staff-chk"><label><input type="checkbox" name="advanceType" value="เงินส่วนกลาง"> เงินส่วนกลาง</label></td>
         <td class="disabled-zone"></td>
         <td class="sig-blank disabled-zone" rowspan="4"></td>
         <td class="sig-blank disabled-zone" rowspan="4"></td>
@@ -398,11 +405,11 @@
         <td class="sig-blank disabled-zone" rowspan="4"></td>
       </tr>
       <tr>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> เงินวิชาการ</td>
+        <td class="staff-chk"><label><input type="checkbox" name="advanceType" value="เงินวิชาการ"> เงินวิชาการ</label></td>
         <td class="disabled-zone"></td>
       </tr>
       <tr>
-        <td class="staff-chk disabled-zone"><input type="checkbox" disabled> ใบสั่งเลขที่ / ลงวันที่</td>
+        <td class="staff-chk"><label><input type="checkbox" name="advanceType" value="ใบสั่งเลขที่ / ลงวันที่"> ใบสั่งเลขที่ / ลงวันที่</label></td>
         <td class="disabled-zone"></td>
       </tr>
       <tr>
@@ -437,7 +444,7 @@
   <button id="newFormBtn" type="button">ส่งคำขอใหม่</button>
 </div>
 
-<div class="credit">ใบส้ม Online · v3.5 · 2026-08-06</div>
+<div class="credit">ใบส้ม Online · v3.6 · 2026-08-06</div>
 
 <script>
 // ⚠️ ต้องแก้เป็น URL ของ Apps Script Web App หลัง deploy จริง
@@ -456,11 +463,11 @@ for (let i = 1; i <= EXCHANGE_ROW_COUNT; i++) {
     '<td class="in"><input type="number" step="0.01" class="exNewPrice"></td>' +
     '<td class="diff exDiff">0</td>' +
     (i === 1
-      ? '<td class="notes" rowspan="' + EXCHANGE_ROW_COUNT + '">' +
+      ? '<td class="notes" rowspan="' + (EXCHANGE_ROW_COUNT + 1) + '">' +   // +1 = แถวรวมท้ายตาราง
           '<textarea id="details" required></textarea>' +
           '<div class="amt-wrap">' +
-            '<label>จำนวนเงินรวมทั้งสิ้น (บาท) <span class="req">*</span></label>' +
-            '<input type="number" id="totalAmount" min="0" step="0.01" required>' +
+            '<label>จำนวนเงินรวมทั้งสิ้น (บาท)</label>' +
+            '<input type="number" id="totalAmount" min="0" step="0.01">' +
           '</div>' +
           '<div class="proof"><label>' +
             '<input type="checkbox" id="needPaymentProof"> ' +
@@ -475,10 +482,39 @@ for (let i = 1; i <= EXCHANGE_ROW_COUNT; i++) {
   const diffEl = tr.querySelector('.exDiff');
   const updateDiff = () => {
     const diff = (parseFloat(newPriceEl.value) || 0) - (parseFloat(returnPriceEl.value) || 0);
-    diffEl.textContent = diff.toFixed(2).replace(/\.00$/, '');
+    diffEl.textContent = fmtMoney(diff);
+    updateExchangeTotals();
   };
   returnPriceEl.addEventListener('input', updateDiff);
   newPriceEl.addEventListener('input', updateDiff);
+}
+
+/* ---- แถวสรุปรวมท้ายตารางเปลี่ยนสินค้า (คิดให้อัตโนมัติ) ----
+   ต้องอยู่ใน <tbody id="exchangeRows"> เดียวกัน ไม่งั้น rowspan ของช่องรายละเอียดจะไม่คลุมถึง
+   (rowspan ข้าม row group ไม่ได้ตามสเปก) */
+const totalRow = document.createElement('tr');
+totalRow.className = 'ex-total';
+totalRow.innerHTML =
+  '<td colspan="2" class="ctr lbl">รวมสินค้าที่เปลี่ยน</td>' +
+  '<td class="diff" id="sumReturnPrice">0</td>' +
+  '<td class="ctr"></td>' +
+  '<td class="diff" id="sumNewPrice">0</td>' +
+  '<td class="diff" id="sumDiff">0</td>';
+exchangeRowsEl.appendChild(totalRow);
+
+function fmtMoney(n) {
+  return (Math.round(n * 100) / 100).toLocaleString('en-US', { maximumFractionDigits: 2 });
+}
+
+function updateExchangeTotals() {
+  let sumRet = 0, sumNew = 0;
+  document.querySelectorAll('.exchange-row').forEach(function (row) {
+    sumRet += parseFloat(row.querySelector('.exReturnPrice').value) || 0;
+    sumNew += parseFloat(row.querySelector('.exNewPrice').value) || 0;
+  });
+  document.getElementById('sumReturnPrice').textContent = fmtMoney(sumRet);
+  document.getElementById('sumNewPrice').textContent = fmtMoney(sumNew);
+  document.getElementById('sumDiff').textContent = fmtMoney(sumNew - sumRet);
 }
 
 // ปัดลูกกลิ้งเมาส์แล้วอย่าไปเปลี่ยนตัวเลขในช่องราคา (พฤติกรรมติดมากับ type=number)
@@ -559,6 +595,11 @@ function fillForm(d) {
       : cats.indexOf(c.value) >= 0;
   });
 
+  var adv = d.advanceType || [];
+  document.querySelectorAll('input[name=advanceType]').forEach(function (c) {
+    c.checked = adv.indexOf(c.value) >= 0;
+  });
+
   var items = d.exchangeItems || [];
   document.querySelectorAll('.exchange-row').forEach(function (row, i) {
     var it = items[i] || {};
@@ -568,6 +609,7 @@ function fillForm(d) {
     row.querySelector('.exNewPrice').value = it.newPrice || '';
     row.querySelector('.exReturnPrice').dispatchEvent(new Event('input'));
   });
+  updateExchangeTotals();
 }
 
 let attachedFiles = []; // {filename, mimeType, base64, sizeLabel}
@@ -633,9 +675,9 @@ document.getElementById('formView').addEventListener('submit', async (e) => {
 
   const requester = document.getElementById('requester').value.trim();
   const details = document.getElementById('details').value.trim();
-  const totalAmount = document.getElementById('totalAmount').value;
+  const totalAmount = document.getElementById('totalAmount').value;   // ไม่บังคับกรอก
 
-  if (!requester || !details || totalAmount === '') {
+  if (!requester || !details) {
     showError('กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบก่อนส่งคำขอ');
     return;
   }
@@ -653,6 +695,10 @@ document.getElementById('formView').addEventListener('submit', async (e) => {
   const category2 = Array.from(document.querySelectorAll('input[name=category2]:checked'))
     .map(el => (el.value === 'อื่น ๆ' && otherTxt) ? ('อื่น ๆ: ' + otherTxt) : el.value);
 
+  // ประเภทเงินทดหนี้ที่ผู้แทนติ๊กเอง (กล่องซ้ายล่าง)
+  const advanceType = Array.from(document.querySelectorAll('input[name=advanceType]:checked'))
+    .map(el => el.value);
+
   const exchangeItems = [];
   document.querySelectorAll('.exchange-row').forEach(row => {
     exchangeItems.push({
@@ -667,6 +713,7 @@ document.getElementById('formView').addEventListener('submit', async (e) => {
     requester,
     department: document.getElementById('department').value.trim(),
     category2,
+    advanceType,
     meetingName: document.getElementById('meetingName').value.trim(),
     meetingPlace: document.getElementById('meetingPlace').value.trim(),
     meetingDate: document.getElementById('meetingDate').value.trim(),
@@ -713,6 +760,7 @@ document.getElementById('newFormBtn').addEventListener('click', () => {
   attachedFiles = [];
   renderFileList();
   document.querySelectorAll('.exDiff').forEach(function (el) { el.textContent = '0'; });
+  updateExchangeTotals();
   document.getElementById('doneView').classList.add('hidden');
   document.getElementById('formView').classList.remove('hidden');
   refreshDocNo();   // ดึงเลขถัดไปมาโชว์ใหม่

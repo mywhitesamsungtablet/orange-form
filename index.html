@@ -63,6 +63,21 @@
     background:#fff; border:1px solid #1e7e34; cursor:pointer; white-space:nowrap;
   }
   #loadBtn:hover{background:#eefbf1;}
+  #statusBtn{
+    padding:4px 16px; font-size:11px; font-weight:700; color:#8a5b00;
+    background:#fff7e6; border:1px solid #e0b96a; cursor:pointer; white-space:nowrap;
+  }
+  #statusBtn:hover{background:#ffefcc;}
+  /* แถบสถานะรวมใต้เลขที่ใบส้ม (โผล่เฉพาะตอนโหลด/เช็กสถานะ) */
+  .docstat{
+    margin-top:2px; font-size:10.5px; font-weight:700; padding:1px 7px;
+    border:1px solid; border-radius:9px; display:none;
+  }
+  .docstat.show{display:inline-block;}
+  .docstat.wait{background:#fff7e6; border-color:#e0b96a; color:#8a5b00;}
+  .docstat.ok{background:#e9f7ec; border-color:#8ecb9c; color:#12652a;}
+  .docstat.ret{background:#fff1e6; border-color:#e0a06a; color:#8a3b00;}
+  .docstat.no{background:#fdecea; border-color:#e8a09a; color:#a12622;}
 
   /* ---------- ตารางหลัก ---------- */
   table.f{border-collapse:collapse; width:100%; table-layout:fixed;}
@@ -154,7 +169,19 @@
   /* แถวลายเซ็นเจ้าหน้าที่ (แสดงอย่างเดียว) */
   .sig-name{text-align:center; font-size:10.5px; padding:1px;}
   .sig-role{text-align:center; font-size:9.5px; padding:1px; height:16px;}
-  .sig-blank{height:30px; background:#fff;}
+  .sig-blank{height:30px; background:#fff; text-align:center; vertical-align:middle;}
+  /* ผลการอนุมัติที่แสดงในช่องเซ็น (v5.0) */
+  .sig-blank .st{font-size:11px; font-weight:800; display:block; line-height:1.25;}
+  .sig-blank .by{font-size:10px; display:block;}
+  .sig-blank .at{font-size:9px; color:#666; display:block;}
+  /* หมายเหตุยาว ๆ ต้องไม่ดันช่องเซ็นให้สูงจนหน้าพิมพ์ตกไปแผ่นที่ 2 → ตัดที่ 3 บรรทัด */
+  .sig-blank .nt{
+    font-size:8.5px; color:#555; display:-webkit-box; margin-top:1px; word-break:break-word;
+    -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; max-height:32px;
+  }
+  .sig-blank.s-ok .st{color:#12652a;}
+  .sig-blank.s-ret .st{color:#8a3b00;}
+  .sig-blank.s-no .st{color:var(--red);}
   .disabled-zone{background:#f7f7f7;}
   .disabled-zone input{background:#efefef !important;}
 
@@ -218,7 +245,9 @@
     .exchange-row td{height:26px;}
     td.notes textarea{min-height:190px;}
     /* ช่องเซ็นครอบ 4 แถว (rowspan=4) → ต้องตั้งสูงเกินผลรวมแถวซ้าย ถึงจะดันหน้าให้เต็ม A4 */
-    .sig-blank{height:128px;}
+    /* ★ ต้องเผื่อกรณีช่องเซ็นมีผลอนุมัติ+หมายเหตุอยู่ข้างใน (สูงกว่าตอนว่าง)
+       วัดแล้ว 115px = 98.5% พอดี 1 แผ่น ถ้าดันมากกว่านี้จะตกไปแผ่นที่ 2 */
+    .sig-blank{height:115px;}
     .sig-role{height:22px;}
     .staff-chk{padding:4px 4px;}
     /* ซ่อนสิ่งที่ไม่ใช่ตัวฟอร์ม */
@@ -255,10 +284,12 @@
         <div class="docno-wrap">
           <div class="docno-label">เลขที่ใบส้ม</div>
           <div class="docno" id="docNo">····-··</div>
+          <div class="docstat" id="docStat"></div>
         </div>
         <div class="docbtns">
           <button type="submit" id="submitBtn">ส่งคำขอ</button>
           <button type="button" id="loadBtn">โหลดใบส้มเดิม</button>
+          <button type="button" id="statusBtn">เช็กสถานะใบส้ม</button>
         </div>
       </div>
     </div>
@@ -405,13 +436,14 @@
       <tr>
         <td class="staff-chk"><label><input type="checkbox" name="advanceType" value="เงินส่วนกลาง"> เงินส่วนกลาง</label></td>
         <td class="disabled-zone"></td>
-        <td class="sig-blank disabled-zone" rowspan="4"></td>
-        <td class="sig-blank disabled-zone" rowspan="4"></td>
-        <td class="sig-blank disabled-zone" rowspan="4"></td>
-        <td class="sig-blank disabled-zone" rowspan="4"></td>
-        <td class="sig-blank disabled-zone" rowspan="4"></td>
-        <td class="sig-blank disabled-zone" rowspan="4"></td>
-        <td class="sig-blank disabled-zone" rowspan="4"></td>
+        <!-- ★ v5.0 ช่องเซ็นทั้ง 7 = ที่แสดงผลการอนุมัติจริง (id เรียงตรงกับ STEPS ใน Code.gs) -->
+        <td class="sig-blank disabled-zone" rowspan="4" id="sig0"></td>
+        <td class="sig-blank disabled-zone" rowspan="4" id="sig1"></td>
+        <td class="sig-blank disabled-zone" rowspan="4" id="sig2"></td>
+        <td class="sig-blank disabled-zone" rowspan="4" id="sig3"></td>
+        <td class="sig-blank disabled-zone" rowspan="4" id="sig4"></td>
+        <td class="sig-blank disabled-zone" rowspan="4" id="sig5"></td>
+        <td class="sig-blank disabled-zone" rowspan="4" id="sig6"></td>
       </tr>
       <tr>
         <td class="staff-chk"><label><input type="checkbox" name="advanceType" value="เงินวิชาการ"> เงินวิชาการ</label></td>
@@ -458,7 +490,7 @@
   <button id="newFormBtn" type="button">ส่งคำขอใหม่</button>
 </div>
 
-<div class="credit">ใบส้ม Online · v4.0 · 2026-08-06</div>
+<div class="credit">ใบส้ม Online · v5.0 · 2026-08-08</div>
 
 <script>
 // ⚠️ ต้องแก้เป็น URL ของ Apps Script Web App หลัง deploy จริง
@@ -580,6 +612,74 @@ function setVal(id, v) {
   if (el) el.value = (v === undefined || v === null) ? '' : v;
 }
 
+/* ---- แสดงผลการอนุมัติ 7 ขั้น ลงในช่องเซ็นด้านล่าง (v5.0) ---- */
+function statusClass(st) {
+  if (st === 'อนุมัติ') return 's-ok';
+  if (st === 'ตีกลับให้แก้ไข') return 's-ret';
+  if (st === 'ไม่อนุมัติ') return 's-no';
+  return '';
+}
+
+function clearSteps() {
+  for (var i = 0; i < 7; i++) {
+    var td = document.getElementById('sig' + i);
+    if (td) { td.innerHTML = ''; td.className = 'sig-blank disabled-zone'; }
+  }
+  var bar = document.getElementById('docStat');
+  bar.className = 'docstat';
+  bar.textContent = '';
+}
+
+function renderSteps(steps, overall) {
+  clearSteps();
+  (steps || []).forEach(function (s, i) {
+    var td = document.getElementById('sig' + i);
+    if (!td) return;
+    td.className = 'sig-blank disabled-zone ' + statusClass(s.status);
+    if (s.status === 'รอดำเนินการ' || !s.status) return;   // ยังไม่ทำ = ปล่อยว่างเหมือนเดิม
+    td.innerHTML =
+      '<span class="st">' + escapeHtml(s.status) + '</span>' +
+      '<span class="by">' + escapeHtml(s.by || s.approver) + '</span>' +
+      '<span class="at">' + escapeHtml(s.at || '') + '</span>' +
+      (s.note ? '<span class="nt">' + escapeHtml(s.note) + '</span>' : '');
+  });
+
+  if (overall) {
+    var bar = document.getElementById('docStat');
+    var kind = overall === 'อนุมัติครบแล้ว' ? 'ok'
+             : overall === 'ตีกลับให้แก้ไข' ? 'ret'
+             : overall === 'ไม่อนุมัติ' ? 'no' : 'wait';
+    bar.className = 'docstat show ' + kind;
+    bar.textContent = overall;
+  }
+}
+
+/* ---- ผู้เบิกเช็กสถานะใบส้มของตัวเอง (ไม่ต้องใช้ PIN) ---- */
+document.getElementById('statusBtn').addEventListener('click', function () {
+  var num = prompt('ใส่เลขที่ใบส้มที่ต้องการเช็กสถานะ (เช่น 0757-69)');
+  if (!num) return;
+  var btn = this;
+  btn.disabled = true;
+  btn.textContent = 'กำลังเช็ก...';
+  callApi({ action: 'status', number: num.trim() })
+    .then(function (j) {
+      if (!j.ok) { showError(j.error || 'เช็กสถานะไม่สำเร็จ'); return; }
+      hideError();
+      document.getElementById('docNo').textContent = j.number;
+      renderSteps(j.steps, j.overall);
+      var done = (j.steps || []).filter(function (s) { return s.status === 'อนุมัติ'; }).length;
+      var lines = (j.steps || []).map(function (s) {
+        return '• ' + s.label + ' (' + s.approver + ') : ' + s.status +
+               (s.at ? '  — ' + s.at : '') + (s.note ? '\n    หมายเหตุ: ' + s.note : '');
+      }).join('\n');
+      alert('ใบส้ม ' + j.number + '  (' + j.requester + ')\n' +
+            'สถานะรวม: ' + j.overall + '   [อนุมัติแล้ว ' + done + '/7 ขั้น]\n\n' + lines +
+            '\n\nดูสรุปในช่องลงนามด้านล่างของฟอร์มได้เลย');
+    })
+    .catch(function (err) { showError('เช็กสถานะไม่สำเร็จ: ' + err.message); })
+    .finally(function () { btn.disabled = false; btn.textContent = 'เช็กสถานะใบส้ม'; });
+});
+
 function fillForm(d) {
   setVal('requester', d.requester);
   setVal('department', d.department);
@@ -628,6 +728,8 @@ function fillForm(d) {
     row.querySelector('.exReturnPrice').dispatchEvent(new Event('input'));
   });
   updateExchangeTotals();
+
+  renderSteps(d.steps, d.overall);   // v5.0 — โหลดใบเดิมแล้วเห็นผลอนุมัติในช่องลงนามด้วย
 }
 
 let attachedFiles = []; // {filename, mimeType, base64, sizeLabel}
@@ -777,6 +879,7 @@ document.getElementById('newFormBtn').addEventListener('click', () => {
   renderFileList();
   document.querySelectorAll('.exDiff').forEach(function (el) { el.textContent = '0'; });
   updateExchangeTotals();
+  clearSteps();
   document.getElementById('doneView').classList.add('hidden');
   document.getElementById('formView').classList.remove('hidden');
   refreshDocNo();   // ดึงเลขถัดไปมาโชว์ใหม่

@@ -436,7 +436,7 @@
     <table class="f">
       <colgroup><col style="width:160px"><col style="width:920px"></colgroup>
       <tr>
-        <td class="lbl" style="font-weight:700;">แนบไฟล์หลักฐาน <span class="req">*</span></td>
+        <td class="lbl" style="font-weight:700;">แนบไฟล์หลักฐาน</td>
         <td class="file-cell">
           <input type="file" id="fileInput" multiple accept="image/*,.pdf">
           <div id="fileHint">แนบใบเสร็จ / ใบกำกับภาษี / ใบเสนอราคา ฯลฯ ได้หลายไฟล์ (รวมไม่ควรเกิน ~15MB)</div>
@@ -458,7 +458,7 @@
   <button id="newFormBtn" type="button">ส่งคำขอใหม่</button>
 </div>
 
-<div class="credit">ใบส้ม Online · v3.9 · 2026-08-06</div>
+<div class="credit">ใบส้ม Online · v4.0 · 2026-08-06</div>
 
 <script>
 // ⚠️ ต้องแก้เป็น URL ของ Apps Script Web App หลัง deploy จริง
@@ -699,10 +699,7 @@ document.getElementById('formView').addEventListener('submit', async (e) => {
     showError('กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบก่อนส่งคำขอ');
     return;
   }
-  if (attachedFiles.length === 0) {
-    showError('กรุณาแนบไฟล์หลักฐานอย่างน้อย 1 ไฟล์ (ตามระเบียบ "ขอเอกสาร,หลักฐานแนบการเบิกทุกครั้ง")');
-    return;
-  }
+  // v4.0: ไฟล์แนบไม่บังคับแล้ว (เอาดอกจันออกตามที่ผู้ใช้สั่ง) → ไม่บล็อกการส่ง
   if (APPS_SCRIPT_URL.indexOf('PASTE_') === 0) {
     showError('ยังไม่ได้ตั้งค่า APPS_SCRIPT_URL ในโค้ด (สำหรับผู้ดูแลระบบ)');
     return;

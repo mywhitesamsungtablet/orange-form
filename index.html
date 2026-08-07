@@ -113,6 +113,13 @@
     padding:1px 5px; margin-left:4px; vertical-align:-8px;
   }
   .f .staff-chk input.other-txt:focus{outline:1px solid var(--red);}
+  /* ช่องพิมพ์ "ใบสั่งเลขที่" ในกล่องทดหนี้ — เตี้ยกว่าช่อง "อื่น ๆ" เพื่อไม่ให้แถวสูงขึ้น */
+  .f .staff-chk input.order-txt{
+    width:calc(100% - 84px); height:17px; display:inline-block; border:none;
+    background:var(--orange); font-size:10px; font-family:inherit;
+    padding:0 4px; margin-left:4px; vertical-align:-4px;
+  }
+  .f .staff-chk input.order-txt:focus{outline:1px solid var(--red);}
   /* แถวสุดท้ายของตารางหัวข้อมูล: สูงเท่าแถวที่ merge 2 แถวข้างบน */
   tr.info-last td{height:32px;}
 
@@ -408,9 +415,12 @@
         <td class="staff-chk"><label><input type="checkbox" name="advanceType" value="เงินวิชาการ"> เงินวิชาการ</label></td>
         <td class="disabled-zone"></td>
       </tr>
+      <!-- รวม 2 ช่องเป็นช่องเดียว = มีที่พิมพ์เลขที่ใบสั่งจริง ๆ (ช่องขวาไม่ใช่ยอดเงินอยู่แล้ว) -->
       <tr>
-        <td class="staff-chk"><label><input type="checkbox" name="advanceType" value="ใบสั่งเลขที่ / ลงวันที่"> ใบสั่งเลขที่ / ลงวันที่</label></td>
-        <td class="disabled-zone"></td>
+        <td colspan="2" class="staff-chk">
+          <label><input type="checkbox" name="advanceType" value="ใบสั่งเลขที่"> ใบสั่งเลขที่</label>
+          <input type="text" id="advanceOrderNo" class="order-txt">
+        </td>
       </tr>
       <tr>
         <td class="ctr lbl disabled-zone" style="font-weight:700;">รวมทั้งสิ้น</td>
@@ -444,7 +454,7 @@
   <button id="newFormBtn" type="button">ส่งคำขอใหม่</button>
 </div>
 
-<div class="credit">ใบส้ม Online · v3.7 · 2026-08-06</div>
+<div class="credit">ใบส้ม Online · v3.8 · 2026-08-06</div>
 
 <script>
 // ⚠️ ต้องแก้เป็น URL ของ Apps Script Web App หลัง deploy จริง
@@ -595,10 +605,14 @@ function fillForm(d) {
       : cats.indexOf(c.value) >= 0;
   });
 
-  var adv = d.advanceType || [];
+  // ใบเก่าก่อน v3.8 เก็บค่านี้ว่า "ใบสั่งเลขที่ / ลงวันที่" → ปรับให้ตรงกับชื่อใหม่ก่อนเทียบ
+  var adv = (d.advanceType || []).map(function (v) {
+    return v === 'ใบสั่งเลขที่ / ลงวันที่' ? 'ใบสั่งเลขที่' : v;
+  });
   document.querySelectorAll('input[name=advanceType]').forEach(function (c) {
     c.checked = adv.indexOf(c.value) >= 0;
   });
+  setVal('advanceOrderNo', d.advanceOrderNo);
 
   var items = d.exchangeItems || [];
   document.querySelectorAll('.exchange-row').forEach(function (row, i) {
@@ -714,6 +728,7 @@ document.getElementById('formView').addEventListener('submit', async (e) => {
     department: document.getElementById('department').value.trim(),
     category2,
     advanceType,
+    advanceOrderNo: document.getElementById('advanceOrderNo').value.trim(),
     meetingName: document.getElementById('meetingName').value.trim(),
     meetingPlace: document.getElementById('meetingPlace').value.trim(),
     meetingDate: document.getElementById('meetingDate').value.trim(),

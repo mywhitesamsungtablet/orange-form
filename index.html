@@ -113,13 +113,15 @@
     padding:1px 5px; margin-left:4px; vertical-align:-8px;
   }
   .f .staff-chk input.other-txt:focus{outline:1px solid var(--red);}
-  /* ช่องพิมพ์ "ใบสั่งเลขที่" ในกล่องทดหนี้ — เตี้ยกว่าช่อง "อื่น ๆ" เพื่อไม่ให้แถวสูงขึ้น */
-  .f .staff-chk input.order-txt{
-    width:calc(100% - 84px); height:17px; display:inline-block; border:none;
-    background:var(--orange); font-size:10px; font-family:inherit;
-    padding:0 4px; margin-left:4px; vertical-align:-4px;
+  /* ช่องพิมพ์ "ใบสั่งเลขที่" — อยู่ในเซลล์ตัวเองเต็ม ๆ (ห้ามล้ำเข้าเซลล์ "จำนวนเงิน")
+     จึงวางเป็น block ใต้ข้อความ แล้วให้แถวสูงขึ้นแทน */
+  .f td.order-cell{white-space:normal; padding:2px 4px 3px;}
+  .f td.order-cell input.order-txt{
+    display:block; width:100%; height:19px; border:none;
+    background:var(--orange); font-size:10.5px; font-family:inherit;
+    padding:0 4px; margin:3px 0 0;
   }
-  .f .staff-chk input.order-txt:focus{outline:1px solid var(--red);}
+  .f td.order-cell input.order-txt:focus{outline:1px solid var(--red);}
   /* แถวสุดท้ายของตารางหัวข้อมูล: สูงเท่าแถวที่ merge 2 แถวข้างบน */
   tr.info-last td{height:32px;}
 
@@ -415,12 +417,14 @@
         <td class="staff-chk"><label><input type="checkbox" name="advanceType" value="เงินวิชาการ"> เงินวิชาการ</label></td>
         <td class="disabled-zone"></td>
       </tr>
-      <!-- รวม 2 ช่องเป็นช่องเดียว = มีที่พิมพ์เลขที่ใบสั่งจริง ๆ (ช่องขวาไม่ใช่ยอดเงินอยู่แล้ว) -->
+      <!-- ช่องพิมพ์เลขที่ใบสั่งอยู่ในเซลล์ตัวเองล้วน ๆ (ไม่ล้ำเข้าเซลล์ "จำนวนเงิน")
+           → วางใต้ข้อความ แล้วดันแถวให้สูงขึ้นแทน -->
       <tr>
-        <td colspan="2" class="staff-chk">
+        <td class="staff-chk order-cell">
           <label><input type="checkbox" name="advanceType" value="ใบสั่งเลขที่"> ใบสั่งเลขที่</label>
           <input type="text" id="advanceOrderNo" class="order-txt">
         </td>
+        <td class="disabled-zone"></td>
       </tr>
       <tr>
         <td class="ctr lbl disabled-zone" style="font-weight:700;">รวมทั้งสิ้น</td>
@@ -454,7 +458,7 @@
   <button id="newFormBtn" type="button">ส่งคำขอใหม่</button>
 </div>
 
-<div class="credit">ใบส้ม Online · v3.8 · 2026-08-06</div>
+<div class="credit">ใบส้ม Online · v3.9 · 2026-08-06</div>
 
 <script>
 // ⚠️ ต้องแก้เป็น URL ของ Apps Script Web App หลัง deploy จริง
